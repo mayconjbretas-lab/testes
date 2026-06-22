@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0d0f12">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>JBRETAS — Motorista</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg:     #0d0f12;
+      --card:   #1e2229;
+      --card2:  #12151a;
+      --green:  #00e5a0;
+      --gold:   #f9c74f;
+      --red:    #ff4d6d;
+      --purple: #c77dff;
+      --blue:   #4895ef;
+      --border: #2a2f3a;
+      --text:   #e8eaf0;
+      --sub:    #8892a4;
+    }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      overflow: hidden;
+    }
+    /* ─── TELA DE LOGIN ─────────────────────────────── */
+    #login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 32px 24px;
+      gap: 14px;
+    }
+    .logo { font-size: 30px; font-weight: 900; color: var(--green); letter-spacing: 3px; }
+    .logo-sub { font-size: 12px; color: var(--sub); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+    .field { width: 100%; max-width: 380px; }
+    .field label { display: block; font-size: 10px; color: var(--sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .field input {
+      width: 100%; background: var(--card); border: 1px solid var(--border);
+      color: var(--text); padding: 13px 14px; border-radius: 10px; font-size: 15px;
+      outline: none; transition: border-color .2s;
+    }
+    .field input:focus { border-color: var(--green); }
+    .btn {
+      width: 100%; max-width: 380px; padding: 14px; border-radius: 10px;
+      border: none; font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: opacity .15s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:active { opacity: .8; }
+    .btn-green  { background: var(--green);  color: #0d0f12; }
+    .btn-gold   { background: var(--gold);   color: #0d0f12; }
+    .btn-purple { background: var(--purple); color: #0d0f12; }
+    .btn-outline{ background: transparent;   color: var(--green); border: 1.5px solid var(--green); }
+    .btn-sm     { padding: 9px 16px; font-size: 13px; max-width: none; width: auto; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .err { color: var(--red); font-size: 13px; text-align: center; max-width: 380px; min-height: 18px; }
+
+    /* ─── APP ───────────────────────────────────────── */
+    #app { display: none; flex-direction: column; height: 100dvh; }
+
+    /* topbar */
+    .topbar {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 11px 16px; display: flex; align-items: center;
+      justify-content: space-between; flex-shrink: 0;
+    }
+    .topbar-info { display: flex; flex-direction: column; }
+    .topbar-brand { font-size: 13px; font-weight: 900; color: var(--green); letter-spacing: 1px; }
+    .topbar-user  { font-size: 11px; color: var(--sub); margin-top: 1px; }
+    .btn-logout {
+      background: none; border: 1px solid var(--border); color: var(--sub);
+      padding: 6px 12px; border-radius: 7px; font-size: 12px; cursor: pointer;
+    }
+
+    /* scroll area */
+    .content { flex: 1; overflow-y: auto; padding: 16px 16px 90px; }
+
+    /* bottom tabs */
+    .tabs-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--card); border-top: 1px solid var(--border);
+      display: flex; z-index: 200; flex-shrink: 0;
+    }
+    .tab-btn {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 9px 4px 10px; background: none;
+      border: none; color: var(--sub); font-size: 10px; cursor: pointer;
+      gap: 4px; transition: color .2s;
+    }
+    .tab-btn.active { color: var(--green); }
+    .tab-btn svg { width: 22px; height: 22px; }
+
+    /* panes */
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    /* section title */
+    .sec-title {
+      font-size: 16px; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* card */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 11px; font-weight: 700; color: var(--sub);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+    }
+
+    /* form */
+    .fg { margin-bottom: 13px; }
+    .fg label { display: block; font-size: 10px; color: var(--sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .fg input, .fg select {
+      width: 100%; background: var(--card2); border: 1px solid var(--border);
+      color: var(--text); padding: 11px 13px; border-radius: 8px;
+      font-size: 14px; outline: none; appearance: none;
+    }
+    .fg input:focus, .fg select:focus { border-color: var(--green); }
+
+    /* combustível rows */
+    .comb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+    .comb-row span { flex: 1; font-size: 13px; }
+    .comb-row input {
+      width: 110px; background: var(--card2); border: 1px solid var(--border);
+      color: var(--text); padding: 9px 10px; border-radius: 8px;
+      font-size: 14px; text-align: right; outline: none;
+    }
+    .comb-row small { font-size: 11px; color: var(--sub); }
+
+    /* success */
+    .suc {
+      background: #003d2e; color: var(--green); border: 1px solid #00a86b;
+      border-radius: 10px; padding: 11px 14px; font-size: 14px;
+      text-align: center; margin-bottom: 12px; display: none;
+    }
+
+    /* spinner */
+    .spin {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,.25); border-top-color: #0d0f12;
+      border-radius: 50%; animation: sp .6s linear infinite;
+    }
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    /* timer */
+    .timer-big {
+      font-size: 38px; font-weight: 900; color: var(--gold);
+      text-align: center; letter-spacing: 3px; margin: 10px 0;
+    }
+    .timer-btns { display: flex; gap: 10px; margin-bottom: 14px; }
+    .timer-btns button { flex: 1; padding: 10px; }
+
+    /* filter tabs */
+    .filters { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 2px; }
+    .ft {
+      padding: 6px 14px; border-radius: 20px; font-size: 12px;
+      font-weight: 600; border: 1px solid var(--border);
+      background: none; color: var(--sub); cursor: pointer; white-space: nowrap;
+    }
+    .ft.active { background: var(--green); color: #0d0f12; border-color: var(--green); }
+
+    /* hist cards */
+    .hcard {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--border); border-radius: 10px;
+      padding: 13px; margin-bottom: 10px;
+    }
+    .hcard.desc { border-left-color: var(--green); }
+    .hcard.emp  { border-left-color: var(--gold); }
+    .hcard.dev  { border-left-color: var(--blue); }
+    .hcard-top  { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+    .hcard-tipo { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .hcard-tipo.desc { color: var(--green); }
+    .hcard-tipo.emp  { color: var(--gold); }
+    .hcard-tipo.dev  { color: var(--blue); }
+    .hcard-date { font-size: 11px; color: var(--sub); }
+    .hcard-posto { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .hcard-det  { font-size: 12px; color: var(--sub); line-height: 1.6; }
+    .badge {
+      display: inline-block; padding: 3px 9px; border-radius: 5px;
+      font-size: 11px; font-weight: 700; margin-top: 7px;
+    }
+    .b-ok      { background: #003d2e; color: var(--green); }
+    .b-pend    { background: #271c06; color: var(--gold); }
+    .b-maior   { background: #2a0a12; color: var(--red); }
+    .b-menor   { background: #0e1f35; color: var(--blue); }
+    .b-dev     { background: #0e1f35; color: var(--blue); }
+    .empty     { text-align: center; padding: 48px 20px; color: var(--sub); font-size: 14px; }
+
+    /* histórico — seções */
+    .hist-section-title {
+      font-size: 12px; font-weight: 700; color: var(--sub);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin: 16px 0 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     TELA DE LOGIN
+     ================================================================ -->
+<div id="login-screen">
+  <div class="logo">⛽ JBRETAS</div>
+  <div class="logo-sub">App do Motorista</div>
+
+  <div class="field">
+    <label>E-mail</label>
+    <input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email">
+  </div>
+  <div class="field">
+    <label>Senha</label>
+    <input type="password" id="l-senha" placeholder="••••••" autocomplete="current-password">
+  </div>
+  <div class="err" id="l-err"></div>
+  <button class="btn btn-green" id="btn-login">Entrar</button>
+</div>
+
+<!-- ================================================================
+     APP PRINCIPAL
+     ================================================================ -->
+<div id="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-info">
+      <span class="topbar-brand">⛽ JBRETAS Motorista</span>
+      <span class="topbar-user" id="topbar-nome">–</span>
+    </div>
+    <button class="btn-logout" id="btn-logout">Sair</button>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="content">
+
+    <!-- ── DESCARGA ─────────────────────────────────── -->
+    <div id="pane-descarga" class="pane active">
+      <div class="sec-title">🚛 Descarga</div>
+      <div class="suc" id="suc-desc">✅ Descarga registrada com sucesso!</div>
+
+      <div class="card">
+        <div class="fg">
+          <label>Placa do Caminhão</label>
+          <input type="text" id="inp-placa-desc" placeholder="ABC-1234" maxlength="8" style="text-transform:uppercase">
+        </div>
+        <div class="fg">
+          <label>Placa do Veículo</label>
+          <input type="text" id="inp-placa-desc" placeholder="ABC-1234" maxlength="8" style="text-transform:uppercase" inputmode="text">
+        </div>
+        <div class="fg">
+          <label>Posto de Destino</label>
+          <select id="sel-posto-desc" onchange="onPostoDescChange()">
+            <option value="">Selecione o posto...</option>
+          </select>
+        </div>
+
+        <div id="bloco-combs" style="display:none">
+          <div class="card-title">Litros por Combustível</div>
+          <div id="combs-list"></div>
+        </div>
+
+        <button class="btn btn-green" id="btn-desc" style="display:none;margin-top:6px" onclick="enviarDescarga()">
+          Confirmar Descarga
+        </button>
+      </div>
+    </div>
+
+    <!-- ── EMPRÉSTIMO ──────────────────────────────── -->
+    <div id="pane-emprestimo" class="pane">
+      <div class="sec-title">🔄 Empréstimo</div>
+      <div class="suc" id="suc-emp">✅ Empréstimo registrado!</div>
+
+      <div class="card">
+        <div class="fg">
+          <label>Placa do Veículo</label>
+          <input type="text" id="inp-placa-emp" placeholder="ABC-1234" maxlength="8" style="text-transform:uppercase" inputmode="text">
+        </div>
+        <div class="fg">
+          <label>Posto que vai RECEBER</label>
+          <select id="sel-emp-recebe" onchange="onPostoEmpChange()">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Posto que vai EMPRESTAR</label>
+          <select id="sel-emp-empresta">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Combustível</label>
+          <select id="sel-emp-comb">
+            <option value="">Selecione o posto primeiro...</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Quantidade (L)</label>
+          <input type="number" id="inp-emp-litros" placeholder="0" min="0" inputmode="numeric">
+        </div>
+        <button class="btn btn-gold" onclick="enviarEmprestimo()">Registrar Empréstimo</button>
+      </div>
+    </div>
+
+    <!-- ── DEVOLUÇÃO ───────────────────────────────── -->
+    <div id="pane-devolucao" class="pane">
+      <div class="sec-title">↩️ Devolução</div>
+      <div class="suc" id="suc-dev">✅ Devolução registrada!</div>
+
+      <div class="card">
+        <div class="fg">
+          <label>Placa do Veículo</label>
+          <input type="text" id="inp-placa-dev" placeholder="ABC-1234" maxlength="8" style="text-transform:uppercase" inputmode="text">
+        </div>
+        <div class="fg">
+          <label>Posto que está DEVOLVENDO</label>
+          <select id="sel-dev-devolve" onchange="onPostoDevChange()">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Posto que vai RECEBER a devolução</label>
+          <select id="sel-dev-recebe">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Combustível</label>
+          <select id="sel-dev-comb">
+            <option value="">Selecione o posto primeiro...</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Quantidade (L)</label>
+          <input type="number" id="inp-dev-litros" placeholder="0" min="0" inputmode="numeric">
+        </div>
+
+        <!-- Cronômetro -->
+        <div class="card-title" style="margin-top:6px">Cronômetro do Empréstimo</div>
+        <div class="timer-big" id="timer-display">--:--:--</div>
+        <div class="timer-btns">
+          <button class="btn btn-outline btn-sm" id="btn-timer-start" onclick="timerStart()">▶ Iniciar</button>
+          <button class="btn btn-outline btn-sm" id="btn-timer-freeze" onclick="timerFreeze()" disabled>⏹ Congelar</button>
+          <button class="btn btn-outline btn-sm" id="btn-timer-reset" onclick="timerReset()">↺ Reset</button>
+        </div>
+        <div class="fg">
+          <label>Tempo Total (preenchido automaticamente)</label>
+          <input type="text" id="inp-tempo" placeholder="--" readonly>
+        </div>
+
+        <button class="btn btn-purple" onclick="enviarDevolucao()">Registrar Devolução</button>
+      </div>
+    </div>
+
+    <!-- ── HISTÓRICO ───────────────────────────────── -->
+    <div id="pane-historico" class="pane">
+      <div class="sec-title">
+        📋 Histórico
+        <button class="btn btn-outline btn-sm" onclick="carregarHistorico()" style="margin-left:auto">↻ Atualizar</button>
+      </div>
+
+      <div class="filters">
+        <button class="ft active" data-f="todos"       onclick="setFiltro(this)">Todos</button>
+        <button class="ft"        data-f="Descarga"    onclick="setFiltro(this)">Descarga</button>
+        <button class="ft"        data-f="Empréstimo"  onclick="setFiltro(this)">Empréstimo</button>
+        <button class="ft"        data-f="Devolução"   onclick="setFiltro(this)">Devolução</button>
+      </div>
+
+      <div id="hist-list"><div class="empty">Toque em ↻ para carregar.</div></div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Bottom tabs -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" id="tabbtn-descarga" onclick="switchTab('descarga',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+      </svg>
+      Descarga
+    </button>
+    <button class="tab-btn" id="tabbtn-emprestimo" onclick="switchTab('emprestimo',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+      </svg>
+      Empréstimo
+    </button>
+    <button class="tab-btn" id="tabbtn-devolucao" onclick="switchTab('devolucao',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 10h10a8 8 0 018 8v2M3 10l6 6M3 10l6-6"/>
+      </svg>
+      Devolução
+    </button>
+    <button class="tab-btn" id="tabbtn-historico" onclick="switchTab('historico',this);carregarHistorico()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Histórico
+    </button>
+  </div>
+</div><!-- /app -->
+
+<script>
+// ================================================================
+// CONFIG — única linha que contém a URL (não expõe dados sensíveis)
+// ================================================================
+const API = 'https://script.google.com/macros/s/AKfycbwoJ3-g48frwYtMlnpVj5EIYapInPP11OJXrkOPUzCULrbIZWMQW51xFe-Ot4cox00r/exec';
+
+// ================================================================
+// ESTADO
+// ================================================================
+let sessao = null;            // { nome, email, placa }
+let postos = [];              // [{ nome, combustiveis[] }]
+let histDados = [];           // registros brutos do backend
+let filtroAtivo = 'todos';
+let timerIv = null;           // setInterval do cronômetro
+let timerInicio = null;       // Date.now() quando iniciou
+let timerFinal = '';          // string final após congelar
+let histCarregado = false;    // evita recarregar desnecessariamente
+
+// ================================================================
+// HELPERS
+// ================================================================
+const $ = id => document.getElementById(id);
+
+function hoje() {
+  const d = new Date();
+  return [d.getDate(), d.getMonth()+1, d.getFullYear()]
+    .map(n => String(n).padStart(2,'0')).join('/').replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$1/$2/$3');
+}
+function agora() {
+  const d = new Date();
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function msParaHMS(ms) {
+  const s = Math.floor(ms / 1000);
+  return [Math.floor(s/3600), Math.floor((s%3600)/60), s%60]
+    .map(n => String(n).padStart(2,'0')).join(':');
+}
+function fmtL(v) { return v != null ? Number(v).toLocaleString('pt-BR') + ' L' : '-'; }
+
+async function GET(params) {
+  const qs = Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
+  const r = await fetch(`${API}?${qs}`);
+  return r.json();
+}
+async function POST(body) {
+  const r = await fetch(API, { method:'POST', body: JSON.stringify(body) });
+  return r.json();
+}
+
+function showSuc(id) {
+  const el = $(id);
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3500);
+}
+function setBtnLoad(el, sim, textoOriginal) {
+  if (sim) { el.innerHTML = '<span class="spin"></span> Enviando...'; el.disabled = true; }
+  else      { el.innerHTML = textoOriginal; el.disabled = false; }
+}
+
+// preenche selects de posto
+function popularSelect(id) {
+  const sel = $(id);
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Selecione o posto...</option>';
+  postos.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.nome; o.textContent = p.nome;
+    if (p.nome === cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+function popularTodosSelects() {
+  ['sel-posto-desc','sel-emp-recebe','sel-emp-empresta','sel-dev-devolve','sel-dev-recebe']
+    .forEach(popularSelect);
+}
+
+// ================================================================
+// LOGIN
+// ================================================================
+$('btn-login').onclick = async () => {
+  const email = $('l-email').value.trim().toLowerCase();
+  const senha = $('l-senha').value.trim();
+  const errEl = $('l-err');
+  const btn   = $('btn-login');
+
+  errEl.textContent = '';
+  if (!email || !senha) { errEl.textContent = 'Preencha e-mail e senha.'; return; }
+
+  setBtnLoad(btn, true, 'Entrar');
+
+  try {
+    const res = await GET({ tipo:'login', email, senha });
+
+    if (res.erro) {
+      errEl.textContent = 'E-mail ou senha incorretos.';
+      setBtnLoad(btn, false, 'Entrar');
+      return;
+    }
+    if (res.usuario.postoKey !== 'MOTORISTA') {
+      errEl.textContent = 'Acesso negado. Este app é exclusivo para motoristas.';
+      setBtnLoad(btn, false, 'Entrar');
+      return;
+    }
+
+    sessao = { nome: res.usuario.gerente, email: res.usuario.email };
+    $('topbar-nome').textContent = sessao.nome;
+
+    // carrega postos reais do backend — sem expor dados no HTML
+    const r2 = await GET({ tipo:'cadastroPostos' });
+    if (r2.success) postos = r2.postos;
+    popularTodosSelects();
+
+    $('login-screen').style.display = 'none';
+    $('app').style.display = 'flex';
+
+  } catch(e) {
+    errEl.textContent = 'Erro de conexão. Verifique sua internet.';
+    setBtnLoad(btn, false, 'Entrar');
+  }
+};
+
+// Enter no campo de senha faz login
+$('l-senha').addEventListener('keydown', e => { if (e.key==='Enter') $('btn-login').click(); });
+
+// ================================================================
+// LOGOUT
+// ================================================================
+$('btn-logout').onclick = () => {
+  sessao = null; postos = []; histDados = []; histCarregado = false;
+  timerReset();
+  $('app').style.display = 'none';
+  $('login-screen').style.display = 'flex';
+  $('l-email').value = ''; $('l-senha').value = '';
+  setBtnLoad($('btn-login'), false, 'Entrar');
+  $('l-err').textContent = '';
+};
+
+// ================================================================
+// NAVEGAÇÃO ENTRE ABAS
+// ================================================================
+function switchTab(nome, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  $('pane-' + nome).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ================================================================
+// ABA DESCARGA
+// ================================================================
+function onPostoDescChange() {
+  const nome = $('sel-posto-desc').value;
+  const bloco = $('bloco-combs');
+  const btnD  = $('btn-desc');
+  const lista = $('combs-list');
+
+  if (!nome) { bloco.style.display='none'; btnD.style.display='none'; return; }
+
+  const p = postos.find(x => x.nome === nome);
+  if (!p) return;
+
+  lista.innerHTML = '';
+  p.combustiveis.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'comb-row';
+    row.innerHTML = `<span>${c}</span>
+      <input type="number" class="ci" data-comb="${c}" placeholder="0" min="0" inputmode="numeric">
+      <small>L</small>`;
+    lista.appendChild(row);
+  });
+
+  bloco.style.display = 'block';
+  btnD.style.display  = 'block';
+}
+
+async function enviarDescarga() {
+  const posto = $('sel-posto-desc').value;
+  const placa = $('inp-placa-desc').value.trim().toUpperCase();
+  if (!posto) return;
+  if (!placa) { alert('Informe a placa do veículo.'); return; }
+
+  const itens = [];
+  document.querySelectorAll('.ci').forEach(inp => {
+    const v = parseFloat(inp.value);
+    if (v > 0) itens.push({ combustivel: inp.dataset.comb, litros: v });
+  });
+  if (!itens.length) { alert('Informe pelo menos um combustível com quantidade maior que zero.'); return; }
+
+  const btn = $('btn-desc');
+  setBtnLoad(btn, true, 'Confirmar Descarga');
+
+  try {
+    await POST({
+      tipo:      'lancamento_motorista',
+      subtipo:   'descarga',
+      data:      hoje(),
+      hora:      agora(),
+      motorista: sessao.nome,
+      placa:     placa,
+      posto,
+      itens
+    });
+    showSuc('suc-desc');
+    $('sel-posto-desc').value = '';
+    $('bloco-combs').style.display = 'none';
+    btn.style.display = 'none';
+    histCarregado = false;
+  } catch(e) { alert('Erro ao enviar. Tente novamente.'); }
+
+  setBtnLoad(btn, false, 'Confirmar Descarga');
+}
+
+// ================================================================
+// ABA EMPRÉSTIMO
+// ================================================================
+function onPostoEmpChange() {
+  const nome = $('sel-emp-recebe').value;
+  const sel  = $('sel-emp-comb');
+  sel.innerHTML = '<option value="">Selecione...</option>';
+  if (!nome) return;
+  const p = postos.find(x => x.nome === nome);
+  if (!p) return;
+  p.combustiveis.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c; sel.appendChild(o);
+  });
+}
+
+async function enviarEmprestimo() {
+  const recebe   = $('sel-emp-recebe').value;
+  const empresta = $('sel-emp-empresta').value;
+  const comb     = $('sel-emp-comb').value;
+  const litros   = parseFloat($('inp-emp-litros').value);
+  const placa    = $('inp-placa-emp').value.trim().toUpperCase();
+
+  if (!placa || !recebe || !empresta || !comb || !litros) {
+    alert('Preencha todos os campos incluindo a placa.');
+    return;
+  }
+  if (recebe === empresta) {
+    alert('O posto que recebe e o que empresta não podem ser iguais.');
+    return;
+  }
+
+  const btn = document.querySelector('#pane-emprestimo .btn-gold');
+  setBtnLoad(btn, true, 'Registrar Empréstimo');
+
+  try {
+    await POST({
+      tipo:             'lancamento_motorista',
+      subtipo:          'emprestimo',
+      data:             hoje(),
+      hora:             agora(),
+      motorista:        sessao.nome,
+      placa:            placa,
+      posto:            recebe,
+      combustivel:      comb,
+      litros,
+      postoRelacionado: empresta
+    });
+    showSuc('suc-emp');
+    $('sel-emp-recebe').value = '';
+    $('sel-emp-empresta').value = '';
+    $('sel-emp-comb').innerHTML = '<option value="">Selecione o posto primeiro...</option>';
+    $('inp-emp-litros').value = '';
+    histCarregado = false;
+  } catch(e) { alert('Erro ao enviar. Tente novamente.'); }
+
+  setBtnLoad(btn, false, 'Registrar Empréstimo');
+}
+
+// ================================================================
+// ABA DEVOLUÇÃO
+// ================================================================
+function onPostoDevChange() {
+  const nome = $('sel-dev-devolve').value;
+  const sel  = $('sel-dev-comb');
+  sel.innerHTML = '<option value="">Selecione...</option>';
+  if (!nome) return;
+  const p = postos.find(x => x.nome === nome);
+  if (!p) return;
+  p.combustiveis.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c; sel.appendChild(o);
+  });
+}
+
+// Cronômetro
+function timerStart() {
+  if (timerIv) return;
+  timerInicio = Date.now();
+  timerFinal  = '';
+  $('btn-timer-start').disabled  = true;
+  $('btn-timer-freeze').disabled = false;
+  timerIv = setInterval(() => {
+    $('timer-display').textContent = msParaHMS(Date.now() - timerInicio);
+  }, 1000);
+}
+function timerFreeze() {
+  if (!timerIv) return;
+  clearInterval(timerIv); timerIv = null;
+  timerFinal = msParaHMS(Date.now() - timerInicio);
+  $('timer-display').textContent = timerFinal + ' ✓';
+  $('inp-tempo').value = timerFinal;
+  $('btn-timer-freeze').disabled = true;
+}
+function timerReset() {
+  if (timerIv) { clearInterval(timerIv); timerIv = null; }
+  timerInicio = null; timerFinal = '';
+  $('timer-display').textContent = '--:--:--';
+  $('inp-tempo').value = '';
+  $('btn-timer-start').disabled  = false;
+  $('btn-timer-freeze').disabled = true;
+}
+
+async function enviarDevolucao() {
+  const devolve = $('sel-dev-devolve').value;
+  const recebe  = $('sel-dev-recebe').value;
+  const comb    = $('sel-dev-comb').value;
+  const litros  = parseFloat($('inp-dev-litros').value);
+  const placa   = $('inp-placa-dev').value.trim().toUpperCase();
+
+  if (!placa || !devolve || !recebe || !comb || !litros) {
+    alert('Preencha todos os campos incluindo a placa.');
+    return;
+  }
+
+  // se o timer está rodando, congela antes de enviar
+  if (timerIv) timerFreeze();
+
+  const btn = document.querySelector('#pane-devolucao .btn-purple');
+  setBtnLoad(btn, true, 'Registrar Devolução');
+
+  try {
+    await POST({
+      tipo:             'lancamento_motorista',
+      subtipo:          'devolucao',
+      data:             hoje(),
+      hora:             agora(),
+      motorista:        sessao.nome,
+      placa:            placa,
+      posto:            devolve,
+      combustivel:      comb,
+      litros,
+      postoRelacionado: recebe,
+      tempoTotal:       timerFinal || '-'
+    });
+    showSuc('suc-dev');
+    $('sel-dev-devolve').value = '';
+    $('sel-dev-recebe').value  = '';
+    $('sel-dev-comb').innerHTML = '<option value="">Selecione o posto primeiro...</option>';
+    $('inp-dev-litros').value  = '';
+    timerReset();
+    histCarregado = false;
+  } catch(e) { alert('Erro ao enviar. Tente novamente.'); }
+
+  setBtnLoad(btn, false, 'Registrar Devolução');
+}
+
+// ================================================================
+// ABA HISTÓRICO
+// ================================================================
+async function carregarHistorico() {
+  $('hist-list').innerHTML = '<div class="empty">Carregando...</div>';
+
+  try {
+    const res = await GET({ tipo:'lancamentosMotorista', posto:'', dias:'60' });
+    if (!res.success) { $('hist-list').innerHTML = '<div class="empty">Erro ao carregar.</div>'; return; }
+
+    // filtra pelo motorista da sessão atual
+    histDados = (res.registros || []).filter(r =>
+      r.motorista && r.motorista.toUpperCase() === sessao.nome.toUpperCase()
+    );
+    histCarregado = true;
+    renderHistorico();
+
+  } catch(e) {
+    $('hist-list').innerHTML = '<div class="empty">Erro de conexão.</div>';
+  }
+}
+
+function setFiltro(btn) {
+  document.querySelectorAll('.ft').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filtroAtivo = btn.dataset.f;
+  renderHistorico();
+}
+
+function classeStatus(status, tipo) {
+  if (tipo === 'Devolução') return 'b-dev';
+  if (tipo === 'Empréstimo') return 'b-pend';
+  if (!status || status === 'Pendente') return 'b-pend';
+  if (status === 'OK') return 'b-ok';
+  if (status === 'Divergente Maior') return 'b-maior';
+  if (status === 'Divergente Menor') return 'b-menor';
+  return 'b-pend';
+}
+function labelStatus(status, tipo) {
+  if (tipo === 'Devolução')  return '↩️ Devolvido';
+  if (tipo === 'Empréstimo') return '🔄 Empréstimo';
+  if (!status || status === 'Pendente') return '⏳ Aguardando Gerente';
+  if (status === 'OK')                  return '✅ Conferido — OK';
+  if (status === 'Divergente Maior')    return '🔴 Motor > Gerente';
+  if (status === 'Divergente Menor')    return '🔵 Motor < Gerente';
+  return status;
+}
+function tipoCSS(tipo) {
+  if (tipo === 'Descarga')   return 'desc';
+  if (tipo === 'Empréstimo') return 'emp';
+  return 'dev';
+}
+
+function renderHistorico() {
+  const lista = $('hist-list');
+  let dados = filtroAtivo === 'todos' ? histDados : histDados.filter(r => r.tipo === filtroAtivo);
+
+  if (!dados.length) {
+    lista.innerHTML = '<div class="empty">Nenhum registro encontrado.</div>';
+    return;
+  }
+
+  // Agrupa por data para o layout de seções
+  const porData = {};
+  dados.forEach(r => {
+    if (!porData[r.data]) porData[r.data] = [];
+    porData[r.data].push(r);
+  });
+
+  let html = '';
+  Object.keys(porData).sort((a,b) => {
+    const [da,ma,aa] = a.split('/'); const [db,mb,ab] = b.split('/');
+    return new Date(ab,mb-1,db) - new Date(aa,ma-1,da);
+  }).forEach(data => {
+    html += `<div class="hist-section-title">${data}</div>`;
+    porData[data].forEach(r => {
+      const tc = tipoCSS(r.tipo);
+      let det = '';
+      if (r.tipo === 'Descarga') {
+        det = `<b>${r.combustivel}</b> · ${fmtL(r.litros)}`;
+        if (r.diferenca !== null && r.diferenca !== undefined) {
+          const cor = r.diferenca === 0 ? 'var(--green)' : r.diferenca > 0 ? 'var(--red)' : 'var(--blue)';
+          const sinal = r.diferenca > 0 ? '+' : '';
+          det += `<br><span style="color:${cor};font-size:11px">Δ ${sinal}${Number(r.diferenca).toLocaleString('pt-BR')} L</span>`;
+        }
+      } else if (r.tipo === 'Empréstimo') {
+        det = `<b>${r.combustivel}</b> · ${fmtL(r.litros)}<br>Emprestado por: <b>${r.postoRelacionado || '–'}</b>`;
+      } else {
+        det = `<b>${r.combustivel}</b> · ${fmtL(r.litros)}<br>Devolvido para: <b>${r.postoRelacionado || '–'}</b>`;
+        if (r.tempoTotal && r.tempoTotal !== '-') det += ` · ⏱ ${r.tempoTotal}`;
+      }
+
+      html += `
+        <div class="hcard ${tc}">
+          <div class="hcard-top">
+            <span class="hcard-tipo ${tc}">${r.tipo}</span>
+            <span class="hcard-date">${r.hora}</span>
+          </div>
+          <div class="hcard-posto">${r.posto}</div>
+          <div class="hcard-det">${det}</div>
+          <span class="badge ${classeStatus(r.status, r.tipo)}">${labelStatus(r.status, r.tipo)}</span>
+        </div>`;
+    });
+  });
+
+  lista.innerHTML = html;
+}
+</script>
+</body>
+</html>
