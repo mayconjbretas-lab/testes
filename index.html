@@ -205,6 +205,44 @@
       text-transform: uppercase; letter-spacing: 1px;
       margin: 16px 0 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px;
     }
+
+    /* ─── CARDS DE TIMER ATIVO ───────────────────────── */
+    .timer-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); border-radius: 10px;
+      padding: 13px; margin-bottom: 10px;
+    }
+    .timer-card.dev { border-left-color: var(--blue); }
+    .timer-card.congelado { border-left-color: var(--green); opacity: .8; }
+    .timer-card-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--gold); margin-bottom: 4px;
+    }
+    .timer-card.dev .timer-card-label { color: var(--blue); }
+    .timer-card.congelado .timer-card-label { color: var(--green); }
+    .timer-card-posto { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .timer-card-det { font-size: 12px; color: var(--sub); margin-bottom: 8px; }
+    .timer-card-clock {
+      font-size: 30px; font-weight: 900; color: var(--gold);
+      letter-spacing: 3px; text-align: center; margin: 8px 0 10px;
+    }
+    .timer-card.dev .timer-card-clock { color: var(--blue); }
+    .timer-card.congelado .timer-card-clock { color: var(--green); }
+    .btn-congelar {
+      width: 100%; padding: 9px; border-radius: 8px;
+      border: 1px solid var(--gold); background: transparent;
+      color: var(--gold); font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all .15s;
+    }
+    .btn-congelar:active { background: var(--gold); color: #0d0f12; }
+    .btn-congelar.dev { border-color: var(--blue); color: var(--blue); }
+    .btn-congelar.dev:active { background: var(--blue); color: #fff; }
+    .ativos-vazio {
+      text-align: center; padding: 16px;
+      color: var(--sub); font-size: 13px;
+      background: var(--card); border-radius: 10px;
+      border: 1px dashed var(--border);
+    }
   </style>
 </head>
 <body>
@@ -311,6 +349,10 @@
         </div>
         <button class="btn btn-gold" onclick="enviarEmprestimo()">Registrar Empréstimo</button>
       </div>
+
+      <!-- Timers ativos de empréstimo -->
+      <div class="hist-section-title" style="margin-top:20px">⏱ Empréstimos Ativos</div>
+      <div id="timers-emp-list"><div class="ativos-vazio">Nenhum empréstimo ativo no momento.</div></div>
     </div>
 
     <!-- ── DEVOLUÇÃO ───────────────────────────────── -->
@@ -346,17 +388,10 @@
           <input type="number" id="inp-dev-litros" placeholder="0" min="0" inputmode="numeric">
         </div>
 
-        <!-- Cronômetro -->
-        <div class="card-title" style="margin-top:6px">Cronômetro do Empréstimo</div>
-        <div class="timer-big" id="timer-display">--:--:--</div>
-        <div class="timer-btns">
-          <button class="btn btn-outline btn-sm" id="btn-timer-start" onclick="timerStart()">▶ Iniciar</button>
-          <button class="btn btn-outline btn-sm" id="btn-timer-freeze" onclick="timerFreeze()" disabled>⏹ Congelar</button>
-          <button class="btn btn-outline btn-sm" id="btn-timer-reset" onclick="timerReset()">↺ Reset</button>
-        </div>
-        <div class="fg">
-          <label>Tempo Total (preenchido automaticamente)</label>
-          <input type="text" id="inp-tempo" placeholder="--" readonly>
+        <!-- Referência de empréstimos ativos -->
+        <div class="card-title" style="margin-top:6px">⏱ Empréstimos em Andamento</div>
+        <div id="timers-dev-ref" style="margin-bottom:10px">
+          <div class="ativos-vazio">Nenhum empréstimo ativo para referência.</div>
         </div>
 
         <button class="btn btn-purple" onclick="enviarDevolucao()">Registrar Devolução</button>
@@ -420,13 +455,10 @@ const API = 'https://script.google.com/macros/s/AKfycbwoJ3-g48frwYtMlnpVj5EIYapI
 // ================================================================
 // ESTADO
 // ================================================================
-let sessao = null;            // { nome, email, placa }
+let sessao = null;            // { nome, email }
 let postos = [];              // [{ nome, combustiveis[] }]
 let histDados = [];           // registros brutos do backend
 let filtroAtivo = 'todos';
-let timerIv = null;           // setInterval do cronômetro
-let timerInicio = null;       // Date.now() quando iniciou
-let timerFinal = '';          // string final após congelar
 let histCarregado = false;    // evita recarregar desnecessariamente
 
 // ================================================================
@@ -525,6 +557,7 @@ $('btn-login').onclick = async () => {
 
     $('login-screen').style.display = 'none';
     $('app').style.display = 'flex';
+    renderTimersEmp(); // restaura timers ativos do localStorage
 
   } catch(e) {
     errEl.textContent = 'Erro de conexão. Verifique sua internet.';
@@ -672,6 +705,8 @@ async function enviarEmprestimo() {
       postoRelacionado: empresta
     });
     showSuc('suc-emp');
+    // inicia timer por card para este empréstimo
+    addTimerEmp(recebe, comb, litros, empresta);
     $('sel-emp-recebe').value = '';
     $('sel-emp-empresta').value = '';
     $('sel-emp-comb').innerHTML = '<option value="">Selecione o posto primeiro...</option>';
@@ -698,33 +733,104 @@ function onPostoDevChange() {
   });
 }
 
-// Cronômetro
-function timerStart() {
-  if (timerIv) return;
-  timerInicio = Date.now();
-  timerFinal  = '';
-  $('btn-timer-start').disabled  = true;
-  $('btn-timer-freeze').disabled = false;
-  timerIv = setInterval(() => {
-    $('timer-display').textContent = msParaHMS(Date.now() - timerInicio);
-  }, 1000);
+// ================================================================
+// TIMERS POR CARD — cada empréstimo tem seu próprio cronômetro
+// ================================================================
+let timersEmp = JSON.parse(localStorage.getItem('jb_timers_emp') || '[]');
+
+function salvarTimers() {
+  localStorage.setItem('jb_timers_emp', JSON.stringify(timersEmp));
 }
-function timerFreeze() {
-  if (!timerIv) return;
-  clearInterval(timerIv); timerIv = null;
-  timerFinal = msParaHMS(Date.now() - timerInicio);
-  $('timer-display').textContent = timerFinal + ' ✓';
-  $('inp-tempo').value = timerFinal;
-  $('btn-timer-freeze').disabled = true;
+
+function addTimerEmp(posto, comb, litros, postoRelacionado) {
+  timersEmp.push({
+    id:               Date.now(),
+    posto,
+    comb,
+    litros,
+    postoRelacionado,
+    inicio:           Date.now(),
+    congelado:        false,
+    tempoFinal:       ''
+  });
+  salvarTimers();
+  renderTimersEmp();
 }
-function timerReset() {
-  if (timerIv) { clearInterval(timerIv); timerIv = null; }
-  timerInicio = null; timerFinal = '';
-  $('timer-display').textContent = '--:--:--';
-  $('inp-tempo').value = '';
-  $('btn-timer-start').disabled  = false;
-  $('btn-timer-freeze').disabled = true;
+
+function congelarTimer(id) {
+  const t = timersEmp.find(x => x.id === id);
+  if (!t || t.congelado) return;
+  t.congelado  = true;
+  t.tempoFinal = msParaHMS(Date.now() - t.inicio);
+  salvarTimers();
+  renderTimersEmp();
 }
+
+function removerTimer(id) {
+  timersEmp = timersEmp.filter(x => x.id !== id);
+  salvarTimers();
+  renderTimersEmp();
+}
+
+function renderTimersEmp() {
+  const listaEmp = $('timers-emp-list');
+  const listaRef = $('timers-dev-ref');
+
+  if (!timersEmp.length) {
+    const vazio = '<div class="ativos-vazio">Nenhum empréstimo ativo no momento.</div>';
+    listaEmp.innerHTML = vazio;
+    listaRef.innerHTML = '<div class="ativos-vazio">Nenhum empréstimo ativo para referência.</div>';
+    return;
+  }
+
+  let htmlEmp = '';
+  let htmlRef = '';
+
+  timersEmp.forEach(t => {
+    const elapsed = t.congelado ? t.tempoFinal : msParaHMS(Date.now() - t.inicio);
+    const cls = t.congelado ? 'congelado' : '';
+
+    htmlEmp += `
+      <div class="timer-card ${cls}" id="tcard-${t.id}">
+        <div class="timer-card-label">${t.congelado ? '✅ Congelado' : '🔄 Em andamento'}</div>
+        <div class="timer-card-posto">${t.posto}</div>
+        <div class="timer-card-det">${t.comb} · ${fmtL(t.litros)} · Emprestado por: <b>${t.postoRelacionado}</b></div>
+        <div class="timer-card-clock" id="clock-${t.id}">${elapsed}</div>
+        ${!t.congelado
+          ? `<button class="btn-congelar" onclick="congelarTimer(${t.id})">⏹ Congelar Tempo</button>`
+          : `<div style="display:flex;gap:8px;margin-top:4px">
+               <span style="flex:1;text-align:center;font-size:12px;color:var(--green);font-weight:700">Tempo Final: ${t.tempoFinal}</span>
+               <button class="btn-congelar" style="width:auto;padding:6px 12px;font-size:11px;border-color:var(--sub);color:var(--sub)" onclick="removerTimer(${t.id})">✕ Remover</button>
+             </div>`
+        }
+      </div>`;
+
+    // referência na aba devolução (só ativos)
+    if (!t.congelado) {
+      htmlRef += `
+        <div class="timer-card" style="margin-bottom:8px">
+          <div class="timer-card-label">🔄 Em andamento</div>
+          <div class="timer-card-posto">${t.posto} · ${t.comb}</div>
+          <div class="timer-card-clock" id="refclock-${t.id}">${elapsed}</div>
+        </div>`;
+    }
+  });
+
+  listaEmp.innerHTML = htmlEmp;
+  listaRef.innerHTML = htmlRef || '<div class="ativos-vazio">Nenhum empréstimo ativo no momento.</div>';
+}
+
+// Atualiza todos os clocks a cada segundo
+setInterval(() => {
+  timersEmp.forEach(t => {
+    if (t.congelado) return;
+    const elapsed = msParaHMS(Date.now() - t.inicio);
+    const el1 = $('clock-' + t.id);
+    const el2 = $('refclock-' + t.id);
+    if (el1) el1.textContent = elapsed;
+    if (el2) el2.textContent = elapsed;
+  });
+}, 1000);
 
 async function enviarDevolucao() {
   const devolve = $('sel-dev-devolve').value;
@@ -738,8 +844,10 @@ async function enviarDevolucao() {
     return;
   }
 
-  // se o timer está rodando, congela antes de enviar
-  if (timerIv) timerFreeze();
+  // captura tempo do empréstimo ativo se houver
+  const tempoRef = timersEmp.find(t => !t.congelado)
+    ? msParaHMS(Date.now() - timersEmp.find(t => !t.congelado).inicio)
+    : (timersEmp.find(t => t.congelado)?.tempoFinal || '-');
 
   const btn = document.querySelector('#pane-devolucao .btn-purple');
   setBtnLoad(btn, true, 'Registrar Devolução');
@@ -756,15 +864,15 @@ async function enviarDevolucao() {
       combustivel:      comb,
       litros,
       postoRelacionado: recebe,
-      tempoTotal:       timerFinal || '-'
+      tempoTotal:       tempoRef
     });
     showSuc('suc-dev');
     $('sel-dev-devolve').value = '';
     $('sel-dev-recebe').value  = '';
     $('sel-dev-comb').innerHTML = '<option value="">Selecione o posto primeiro...</option>';
     $('inp-dev-litros').value  = '';
-    timerReset();
     histCarregado = false;
+    renderTimersEmp(); // atualiza seção de ativos
   } catch(e) { alert('Erro ao enviar. Tente novamente.'); }
 
   setBtnLoad(btn, false, 'Registrar Devolução');
