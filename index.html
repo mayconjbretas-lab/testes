@@ -569,8 +569,9 @@ function limparPainel() {
 
 function renderPainel() {
   if (idxAtivo < 0 || idxAtivo >= registrosFiltrados.length) return;
+  const r = registrosFiltrados[idxAtivo];
   try {
-    _renderPainelInterno();
+    _renderPainelInterno(r);
   } catch(err) {
     console.error('renderPainel erro:', err);
     document.getElementById('painel-col').innerHTML = `
@@ -582,7 +583,7 @@ function renderPainel() {
   }
 }
 
-function _renderPainelInterno() {
+function _renderPainelInterno(r) {
   const custo = CUSTO_POSTOS[r.Posto] || CUSTO_POSTOS['DEFAULT'];
   const bc = corBandeira(r.Bandeira);
   const est = estados[r._id] || 'pend';
