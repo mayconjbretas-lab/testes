@@ -631,32 +631,32 @@ function _renderPainelInterno(r) {
     let diffHtml = '<span class="diff-eq">—</span>';
     let trCls = '';
     if (mp !== null) {
-      const d = mp - conc; // positivo = meu preço ACIMA do concorrente (ruim)
+      const d = mp - conc;
       if (d > 0.005) {
-        // Meu preço está ACIMA — vermelho, perco cliente
         diffHtml = `<span class="diff-dn">▲ R$${fmt(d)}</span><br><span style="font-size:9px;color:#8b949e">eu mais caro</span>`;
         trCls = 'tr-alert';
       } else if (d < -0.005) {
-        // Meu preço está ABAIXO — verde, estou competitivo
         diffHtml = `<span class="diff-up">▼ R$${fmt(Math.abs(d))}</span><br><span style="font-size:9px;color:#8b949e">eu mais barato</span>`;
         trCls = 'tr-ok';
       } else {
-        // Igual — amarelo
         diffHtml = `<span class="diff-eq">= igual</span>`;
         trCls = 'tr-eq';
       }
     }
-    const mgHtml = c ? (() => {
-      const mg = mp !== null ? (mp - c) : (conc - c); // margem do MEU preço, não do concorrente
+    // Margem inline ao lado do preço
+    const mgInline = c && mp !== null ? (() => {
+      const mg = mp - c;
       const cls = mg >= (MARGEM_MINIMA[k]||0.20) ? 'mg-ok' : 'mg-warn';
-      return `<span class="${cls}">${mg>=0?'+':''}${fmt(mg)}/L</span>`;
-    })() : '—';
+      return `<span class="${cls}" style="font-size:10px;margin-left:4px">${mg>=0?'+':''}${fmt(mg)}/L</span>`;
+    })() : '';
+    const meuPrecoHtml = mp !== null
+      ? `<div style="display:flex;align-items:baseline;gap:0"><span class="v-meu">R$${fmt(mp)}</span>${mgInline}</div>`
+      : `<span style="color:#484f58">—</span>`;
     return `<tr class="${trCls}">
       <td><span class="fuel-nm">${nomes[k]}</span></td>
       <td><span class="v-conc">R$${fmt(conc)}</span></td>
-      <td><span class="v-meu">${mp !== null ? 'R$'+fmt(mp) : '<span style="color:#484f58">—</span>'}</span></td>
+      <td>${meuPrecoHtml}</td>
       <td><span class="custo-txt">${c ? 'R$'+fmt(c) : '—'}</span></td>
-      <td>${mgHtml}</td>
       <td>${diffHtml}</td>
     </tr>`;
   }).join('');
@@ -784,9 +784,8 @@ function _renderPainelInterno(r) {
               <tr>
                 <th>Combustível</th>
                 <th>Concorrente</th>
-                <th>Meu preço</th>
+                <th>Meu preço &nbsp;<span style="font-size:9px;color:#484f58;font-weight:400;text-transform:none;letter-spacing:0">(margem)</span></th>
                 <th>Meu custo</th>
-                <th>Margem</th>
                 <th>Diferença</th>
               </tr>
             </thead>
