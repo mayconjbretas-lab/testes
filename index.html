@@ -631,13 +631,23 @@ function _renderPainelInterno(r) {
     let diffHtml = '<span class="diff-eq">—</span>';
     let trCls = '';
     if (mp !== null) {
-      const d = mp - conc;
-      if (d > 0.005)       { diffHtml = `<span class="diff-up">▲ ${fmt(d)}</span><br><span style="font-size:9px;color:#8b949e">eu mais barato</span>`; trCls = 'tr-ok'; }
-      else if (d < -0.005) { diffHtml = `<span class="diff-dn">▼ ${fmt(Math.abs(d))}</span><br><span style="font-size:9px;color:#8b949e">ele mais barato</span>`; trCls = 'tr-alert'; }
-      else                  { diffHtml = `<span class="diff-eq">= igual</span>`; trCls = 'tr-eq'; }
+      const d = mp - conc; // positivo = meu preço ACIMA do concorrente (ruim)
+      if (d > 0.005) {
+        // Meu preço está ACIMA — vermelho, perco cliente
+        diffHtml = `<span class="diff-dn">▲ R$${fmt(d)}</span><br><span style="font-size:9px;color:#8b949e">eu mais caro</span>`;
+        trCls = 'tr-alert';
+      } else if (d < -0.005) {
+        // Meu preço está ABAIXO — verde, estou competitivo
+        diffHtml = `<span class="diff-up">▼ R$${fmt(Math.abs(d))}</span><br><span style="font-size:9px;color:#8b949e">eu mais barato</span>`;
+        trCls = 'tr-ok';
+      } else {
+        // Igual — amarelo
+        diffHtml = `<span class="diff-eq">= igual</span>`;
+        trCls = 'tr-eq';
+      }
     }
     const mgHtml = c ? (() => {
-      const mg = conc - c;
+      const mg = mp !== null ? (mp - c) : (conc - c); // margem do MEU preço, não do concorrente
       const cls = mg >= (MARGEM_MINIMA[k]||0.20) ? 'mg-ok' : 'mg-warn';
       return `<span class="${cls}">${mg>=0?'+':''}${fmt(mg)}/L</span>`;
     })() : '—';
