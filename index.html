@@ -611,6 +611,7 @@ function _renderPainelInterno(r) {
   }
 
   // Detectar alerta de margem
+  let alertaMargem = null;
   ['GC','ET','GA','S10','S500'].forEach(k => {
     if (r[k] === null || r[k] === undefined) return;
     const c = custo[k];
