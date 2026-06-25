@@ -67,63 +67,33 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 .badge{border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600}
 .badge-pend{background:#21262d;color:#8b949e}
 .badge-ok{background:#00e5a015;color:#00e5a0;border:1px solid #00e5a030}
-.badge-flag覆{background:#f8514915;color:#f85149;border:1px solid #f8514940}
+.badge-flag{background:#f8514915;color:#f85149;border:1px solid #f8514940}
 .card-sub{font-size:11px;color:#8b949e;margin-top:3px}
 .card-sub span{color:#00e5a0;font-weight:600}
 .meta-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
 .mc{background:#21262d;border-radius:5px;padding:3px 8px;font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
 .mc b{color:#c9d1d9}
 
-/* SELETOR DE DATA ONTEM/HOJE */
-.time-switch-container {
-  background: #161b22;
-  padding: 6px 14px;
-  border-bottom: 1px solid #21262d;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-.time-switch-label {
-  font-size: 11px;
-  color: #8b949e;
-  font-weight: 500;
-}
-.time-switch {
-  display: flex;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  overflow: hidden;
-  padding: 2px;
-}
-.time-btn {
-  background: transparent;
-  border: none;
-  color: #8b949e;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.time-btn.active {
-  background: #00e5a0;
-  color: #0d1117;
-}
-
-/* FOTOS */
-.foto-section{flex-shrink:0;background:#0b0f16;border-bottom:1px solid #21262d}
-.foto-tabs{display:flex;border-bottom:1px solid #21262d}
-.foto-tab{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:600;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:4px}
-.foto-tab.active{color:#00e5a0;border-bottom-color:#00e5a0}
-.foto-img-area{height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.foto-img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}
-.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:#484f58;font-size:12px}
-.drive-btn{position:absolute;bottom:8px;right:10px;background:#21262d;border:1px solid #30363d;border-radius:5px;padding:3px 9px;font-size:10px;color:#c9d1d9;text-decoration:none;display:flex;align-items:center;gap:4px}
-.foto-footer{padding:5px 12px;display:flex;gap:10px;background:#0d1117;border-top:1px solid #21262d}
-.fmeta{font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
+/* ÁREA DE FOTOS — SWIPE (MODIFICADO) */
+.fotos-wrap{flex-shrink:0;background:#0a0d12;border-bottom:1px solid #21262d;position:relative;overflow:hidden;height:200px;cursor:grab;user-select:none}
+.fotos-track{display:flex;height:100%;transition:transform .28s cubic-bezier(.4,0,.2,1);will-change:transform}
+.foto-slide{flex-shrink:0;width:100%;height:100%;display:flex}
+.foto-half{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#111620}
+.foto-half img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.foto-label{position:absolute;bottom:0;left:0;right:0;background:#00000090;padding:4px 8px;font-size:9px;font-weight:600;color:#fff;display:flex;align-items:center;gap:4px;z-index:2}
+.foto-label.conc{color:#fbbf24}
+.foto-label.meu{color:#00e5a0}
+.foto-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;height:100%}
+.foto-ph svg{opacity:.3}
+.foto-ph span{font-size:9px;color:#484f58}
+.arr{position:absolute;top:50%;transform:translateY(-50%);background:#00000060;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;pointer-events:none;z-index:2;opacity:.7}
+.arr-l{left:4px}
+.arr-r{right:4px}
+.swipe-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#00000070;border-radius:8px;padding:5px 10px;font-size:10px;color:#ffffff90;pointer-events:none;display:flex;align-items:center;gap:5px;transition:opacity .3s;z-index:3}
+.swipe-dots{display:flex;gap:4px;justify-content:center;padding:5px 0;background:#0a0d12;border-bottom:1px solid #21262d;flex-shrink:0}
+.sdot{width:5px;height:5px;border-radius:50%;background:#30363d;transition:all .2s}
+.sdot.on{background:#00e5a0;width:14px;border-radius:3px}
+.drive-btn{position:absolute;top:8px;right:10px;background:#21262d90;border:1px solid #30363d50;border-radius:5px;padding:3px 9px;font-size:10px;color:#c9d1d9;text-decoration:none;display:flex;align-items:center;gap:4px;z-index:2}
 
 /* PREÇOS */
 .preco-section{flex:1;overflow-y:auto}
@@ -165,14 +135,12 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 
 /* TEMA CLARO */
 body.claro{background:#f0f2f5;color:#1a1f2e}
-body.claro .topbar,.claro .card-header,.claro .foto-tabs,.claro .filtros,.claro .preco-table th,.claro .acoes,.claro .time-switch-container{background:#ffffff;border-color:#dde1e9}
+body.claro .topbar,.claro .card-header,.claro .fotos-wrap,.claro .swipe-dots,.claro .filtros,.claro .preco-table th,.claro .acoes{background:#ffffff;border-color:#dde1e9}
 body.claro .lista-item.ativo{background:#e6f9f2}
 body.claro .lista-item:active{background:#f5f7fa}
 body.claro .li-alvo,.claro .card-title,.claro .fuel-nm,.claro .v-c,.claro .v-m{color:#1a1f2e}
-body.claro .preco-section,.claro .foto-section,.claro .foto-img-area{background:#f5f7fa}
-body.claro .foto-footer{background:#f0f2f5;border-color:#dde1e9}
+body.claro .preco-section{background:#f5f7fa}
 body.claro .chip-sm,.claro .mc,.claro .btn-ant,.claro .btn-icon{background:#eaecf0;color:#4a5168;border-color:#cdd1da}
-body.claro .time-switch {background:#eaecf0;border-color:#cdd1da}
 body.claro .pc-gc{background:#d4f5e2;color:#1a6640}
 body.claro .pc-et{background:#ede8fd;color:#4a2d99}
 body.claro .pc-ga{background:#ddeeff;color:#1a4080}
@@ -236,54 +204,16 @@ body.claro .prog{background:#dde1e9}
     </div>
   </div>
 
-  <!-- SELETOR ONTEM / HOJE -->
-  <div class="time-switch-container">
-    <span class="time-switch-label">Modo de Comparação de Preço:</span>
-    <div class="time-switch">
-      <button class="time-btn active" id="btn-time-hoje" onclick="setTimeMode('hoje')">Hoje</button>
-      <button class="time-btn" id="btn-time-ontem" onclick="setTimeMode('ontem')">Ontem para Hoje</button>
+  <!-- ÁREA DE CAROUSEL INTEGRADA (SWIPE HORIZONTAL) -->
+  <div class="fotos-wrap" id="fotos-wrap">
+    <div class="fotos-track" id="fotos-track">
+      <!-- Injetado via Javascript baseado nas fotos reais da planilha -->
     </div>
+    <div class="arr arr-l">‹</div>
+    <div class="arr arr-r">›</div>
+    <div class="swipe-hint" id="swipe-hint">← arraste para ver fotos →</div>
   </div>
-
-  <div class="foto-section">
-    <div class="foto-tabs">
-      <div class="foto-tab active" onclick="showFotoTab('conc',this)">📷 Concorrente</div>
-      <div class="foto-tab" onclick="showFotoTab('meu',this)">🏠 Meu posto</div>
-    </div>
-    <div class="foto-img-area" id="foto-conc-area">
-      <div class="foto-placeholder" id="foto-conc-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span>Foto não disponível</span>
-      </div>
-      <img class="foto-img" id="foto-conc-img" src="" alt="Foto concorrente" style="display:none"
-           onclick="zoomFoto(this.src)"
-           onerror="this.style.display='none';document.getElementById('foto-conc-err').style.display='flex'">
-      <div class="foto-placeholder" id="foto-conc-err" style="display:none;flex-direction:column;gap:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span style="font-size:11px">Drive bloqueou exibição</span>
-        <a id="link-conc" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
-      </div>
-      <a id="btn-drive-conc" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
-    </div>
-    <div class="foto-img-area" id="foto-meu-area" style="display:none">
-      <div class="foto-placeholder" id="foto-meu-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:32px;height:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span style="font-size:11px;color:#00e5a060">Foto do meu posto não disponível</span>
-      </div>
-      <img class="foto-img" id="foto-meu-img" src="" alt="Foto meu posto" style="display:none"
-           onclick="zoomFoto(this.src)"
-           onerror="this.style.display='none';document.getElementById('foto-meu-err').style.display='flex'">
-      <div class="foto-placeholder" id="foto-meu-err" style="display:none;flex-direction:column;gap:8px;background:#0b1810">
-        <span style="font-size:11px;color:#00e5a090">Drive bloqueou exibição</span>
-        <a id="link-meu" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
-      </div>
-      <a id="btn-drive-meu" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
-    </div>
-    <div class="foto-footer">
-      <span class="fmeta" id="d-gps">📍 sem GPS</span>
-      <span class="fmeta" id="d-data">📅 —</span>
-    </div>
-  </div>
+  <div class="swipe-dots" id="swipe-dots"></div>
 
   <div class="preco-section">
     <div class="alerta-bar" id="alerta-bar" style="display:none">
@@ -296,7 +226,7 @@ body.claro .prog{background:#dde1e9}
           <th>Combustível</th>
           <th>Concorrente</th>
           <th>Meu preço</th>
-          <th>Dif.</th>
+          <th>Diferença</th>
         </tr>
       </thead>
       <tbody id="tbody-precos"></tbody>
@@ -324,8 +254,7 @@ const CUSTO = {DEFAULT:{GC:5.42,ET:3.55,GA:5.88,S10:6.10,S500:5.95}};
 const MEU_PRECO = {};
 
 let todos=[], filtrados=[], estados={}, idxAtivo=-1, filtroStatus='todos';
-let timeMode = 'hoje'; // Modo inicial padrão: Hoje
-let historicoOntem = {}; // Armazena os preços de ontem indexados por PostoAlvo_Combustivel
+let swipeIdx = 0, startX = 0, isDragging = false, dragDelta = 0, hintHidden = false;
 
 // ─── LOAD ────────────────────────────────────────────────────────
 async function carregar(){
@@ -335,11 +264,6 @@ async function carregar(){
     const regs=json.registros||json.data||json||[];
     todos=regs.map((r,i)=>({...norm(r),_id:i}));
     estados={};todos.forEach(r=>{estados[r._id]='pend';});
-    
-    // Mapeia preços de coletas anteriores para simular "Ontem" caso a API traga múltiplos dias,
-    // ou gera um histórico de fallback inteligente baseado em margens comerciais para o cálculo do botão.
-    processarHistoricoOntem();
-
     poblarFiltros();
     aplicarFiltros();
     document.getElementById('data-hoje').textContent=todos.length>0?todos[todos.length-1].Data:'—';
@@ -366,35 +290,6 @@ function norm(r){
   };
 }
 function pf(v){if(v===null||v===undefined||v===''||v==='-')return null;const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;}
-
-function processarHistoricoOntem(){
-  historicoOntem = {};
-  todos.forEach(r => {
-    const postoKey = r.PostoAlvo.trim().toUpperCase();
-    ['GC','ET','GA','S10','S500'].forEach(k => {
-      if(r[k] !== null && r[k] !== undefined) {
-        // Lógica dinâmica para gerar o preço de ontem baseado na oscilação descrita por você:
-        // Se o preço hoje subiu (ex: 6.15), ontem ele estava mais baixo (ex: 5.89).
-        // Criamos uma variação fixa simulada sutil caso o banco não traga 2 dias completos.
-        if (k === 'GC' && r[k] === 6.15) {
-          historicoOntem[`${postoKey}_${k}`] = 5.89; // Exemplo exato da sua descrição
-        } else {
-          historicoOntem[`${postoKey}_${k}`] = r[k] - 0.08; 
-        }
-      }
-    });
-  });
-}
-
-// ─── ALTERNADOR DE TEMPO (HOJE / ONTEM) ──────────────────────────
-function setTimeMode(mode) {
-  timeMode = mode;
-  document.getElementById('btn-time-hoje').classList.toggle('active', mode === 'hoje');
-  document.getElementById('btn-time-ontem').classList.toggle('active', mode === 'ontem');
-  if(idxAtivo >= 0) {
-    renderDetalhe();
-  }
-}
 
 // ─── FILTROS ─────────────────────────────────────────────────────
 function poblarFiltros(){
@@ -477,8 +372,6 @@ function renderDetalhe(){
   document.getElementById('d-ger').textContent=r.Gerente||'—';
   document.getElementById('d-hora').textContent=r.Hora||'—';
   document.getElementById('d-sup').textContent=r.Supervisor||'—';
-  document.getElementById('d-data').textContent='📅 '+(r.Data||'—');
-  document.getElementById('d-gps').textContent=r.Latitude&&r.Longitude?'📍 '+r.Latitude+', '+r.Longitude:'📍 sem GPS';
 
   const bt=document.getElementById('d-band');
   bt.textContent=r.Bandeira||'';bt.style.background=bc.bg;bt.style.color=bc.txt;
@@ -487,20 +380,14 @@ function renderDetalhe(){
   badge.textContent=est==='ok'?'✓ confirmado':est==='flag'?'⚠ sinalizado':'pendente';
   badge.className='badge '+(est==='ok'?'badge-ok':est==='flag'?'badge-flag':'badge-pend');
 
-  // Próprio posto
+  // Proprio posto
   const pn=s=>(s||'').trim().toUpperCase().replace(/^P\.\s*/,'').replace(/\s+/g,' ');
   const proprio=todos.find(x=>(x.Tipo==='Próprio'||x.Tipo==='Proprio')&&x.Data===r.Data&&(pn(x.PostoAlvo)===pn(r.Posto)||pn(x.Posto)===pn(r.Posto)));
   const meu=Object.assign({},MEU_PRECO[r.Posto]||{});
   if(proprio){['GC','ET','GA','S10','S500'].forEach(k=>{if(proprio[k]!==null&&proprio[k]!==undefined&&!meu[k])meu[k]=proprio[k];});}
 
-  // Fallback caso a constante estática possua valores padrão de preenchimento rápido
-  const fallbackMeus = {GC:5.97, ET:3.99, GA:6.15, S10:5.89};
-  ['GC','ET','GA','S10','S500'].forEach(k => { if(!meu[k] && fallbackMeus[k]) meu[k] = fallbackMeus[k]; });
-
-  // Fotos
-  setFoto('conc', r.Foto);
-  setFoto('meu', proprio?proprio.Foto:'');
-  showFotoTab('conc', document.querySelector('.foto-tab'));
+  // Montagem da estrutura de Slides (Swipe de fotos)
+  renderSwipeFotos(r.Foto, proprio?proprio.Foto:'');
 
   // Alerta margem
   const alertas=[];
@@ -514,19 +401,10 @@ function renderDetalhe(){
   document.getElementById('alerta-txt').innerHTML=alertas.join('<br>');
   ab.style.display=alertas.length?'flex':'none';
 
-  // Tabela de Preços com Lógica do Botão (Hoje vs Ontem)
+  // Tabela
   const tbody=document.getElementById('tbody-precos');
   tbody.innerHTML=['GC','ET','GA','S10','S500'].filter(k=>r[k]!==null&&r[k]!==undefined).map(k=>{
-    const c=custo[k];
-    const mp=meu[k]||null; 
-    
-    // Define qual preço do concorrente usar no cálculo baseado no botão ativo
-    let conc = r[k];
-    const postoKey = r.PostoAlvo.trim().toUpperCase();
-    if (timeMode === 'ontem' && historicoOntem[`${postoKey}_${k}`] !== undefined) {
-      conc = historicoOntem[`${postoKey}_${k}`];
-    }
-
+    const c=custo[k];const mp=meu[k]||null;const conc=r[k];
     let dh='<span class="diff-eq">—</span>';let tc='';
     if(mp!==null){
       const d=mp-conc;
@@ -536,36 +414,74 @@ function renderDetalhe(){
     }
     const mgInline=c&&mp!==null?`<span class="${(mp-c)>=(MARGEM_MIN[k]||0.20)?'mg-ok':'mg-warn'}" style="font-size:10px;margin-left:3px">${(mp-c)>=0?'+':''}${fmt(mp-c)}/L</span>`:'';
     const mpHtml=mp!==null?`<div style="display:flex;align-items:baseline"><span class="v-m">R$${fmt(mp)}</span>${mgInline}</div>`:'<span style="color:#484f58">—</span>';
-    
-    // Adiciona uma tag indicativa discreta abaixo do valor do concorrente se estiver mostrando preço de ontem
-    const tagOntem = (timeMode === 'ontem') ? `<br><span style="font-size:9px;color:#fbbf24;font-weight:500">Ontem</span>` : '';
-
-    return`<tr class="${tc}">
-      <td><span class="fuel-nm">${nomes[k]}</span></td>
-      <td><span class="v-c">R$${fmt(conc)}</span>${tagOntem}</td>
-      <td>${mpHtml}</td>
-      <td>${dh}</td>
-    </tr>`;
+    return`<tr class="${tc}"><td><span class="fuel-nm">${nomes[k]}</span></td><td><span class="v-c">R$${fmt(conc)}</span></td><td>${mpHtml}</td><td>${dh}</td></tr>`;
   }).join('');
 }
 
-function setFoto(tipo,url){
-  const id=extrairId(url);
-  const thumb=id?`https://drive.google.com/thumbnail?id=${id}&sz=w800`:null;
-  const linkUrl=id?`https://drive.google.com/file/d/${id}/view`:(url||'#');
-  const img=document.getElementById(`foto-${tipo}-img`);
-  const ph=document.getElementById(`foto-${tipo}-placeholder`);
-  const err=document.getElementById(`foto-${tipo}-err`);
-  const drv=document.getElementById(`btn-drive-${tipo}`);
-  const lnk=document.getElementById(`link-${tipo}`);
-  img.style.display='none';ph.style.display='none';err.style.display='none';drv.style.display='none';
-  if(thumb){
-    img.src=thumb;img.style.display='block';
-    drv.href=linkUrl;drv.style.display='flex';
-    if(lnk)lnk.href=linkUrl;
-  } else {
-    ph.style.display='flex';
-  }
+// ─── MECÂNICA DO SWIPE DE FOTOS ──────────────────────────────────
+function renderSwipeFotos(urlConc, urlMeu){
+  const track = document.getElementById('fotos-track');
+  
+  // Slide 1: Concorrente
+  const idConc = extrairId(urlConc);
+  const thumbConc = idConc ? `https://drive.google.com/thumbnail?id=${idConc}&sz=w800` : null;
+  const linkConc = idConc ? `https://drive.google.com/file/d/${idConc}/view` : (urlConc || '#');
+  
+  let htmlConc = thumbConc 
+    ? `<img src="${thumbConc}" onclick="zoomFoto('${linkConc}')" onerror="this.parentElement.innerHTML='<div class=foto-ph><span>Drive bloqueou exibição direta</span></div>'">`
+    : `<div class="foto-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto concorrente indisponível</span></div>`;
+  let btnDriveConc = idConc ? `<a class="drive-btn" href="${linkConc}" target="_blank">↗ Drive</a>` : '';
+
+  // Slide 2: Meu posto
+  const idMeu = extrairId(urlMeu);
+  const thumbMeu = idMeu ? `https://drive.google.com/thumbnail?id=${idMeu}&sz=w800` : null;
+  const linkMeu = idMeu ? `https://drive.google.com/file/d/${idMeu}/view` : (urlMeu || '#');
+  
+  let htmlMeu = thumbMeu 
+    ? `<img src="${thumbMeu}" onclick="zoomFoto('${linkMeu}')" onerror="this.parentElement.innerHTML='<div class=foto-ph><span>Drive bloqueou exibição direta</span></div>'">`
+    : `<div class="foto-ph"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span style="color:#00e5a060">Foto do meu posto indisponível</span></div>`;
+  let btnDriveMeu = idMeu ? `<a class="drive-btn" href="${linkMeu}" target="_blank">↗ Drive</a>` : '';
+
+  track.innerHTML = `
+    <div class="foto-slide">
+      <div class="foto-half">
+        ${htmlConc}
+        <div class="foto-label conc">📷 CONCORRENTE</div>
+        ${btnDriveConc}
+      </div>
+    </div>
+    <div class="foto-slide">
+      <div class="foto-half" style="border-left:1px solid #00e5a030">
+        ${htmlMeu}
+        <div class="foto-label meu">🏠 MEU POSTO</div>
+        ${btnDriveMeu}
+      </div>
+    </div>
+  `;
+
+  // Reseta estado para o primeiro slide (Concorrente)
+  swipeIdx = 0;
+  moverTrack(false);
+  buildSwipeDots();
+}
+
+function buildSwipeDots(){
+  document.getElementById('swipe-dots').innerHTML = [0, 1].map(i =>
+    `<div class="sdot${i === swipeIdx ? ' on' : ''}" onclick="goSwipeTo(${i})"></div>`
+  ).join('');
+}
+
+function goSwipeTo(i){
+  swipeIdx = i;
+  moverTrack(true);
+  buildSwipeDots();
+}
+
+function moverTrack(animar){
+  const track = document.getElementById('fotos-track');
+  const largura = document.getElementById('fotos-wrap').clientWidth;
+  track.style.transition = animar ? 'transform .28s cubic-bezier(.4,0,.2,1)' : 'none';
+  track.style.transform = `translateX(${-swipeIdx * largura}px)`;
 }
 
 function extrairId(url){
@@ -575,13 +491,43 @@ function extrairId(url){
   return null;
 }
 
-function showFotoTab(tab,el){
-  document.querySelectorAll('.foto-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  else document.querySelector(`.foto-tab:nth-child(${tab==='conc'?1:2})`).classList.add('active');
-  document.getElementById('foto-conc-area').style.display=tab==='conc'?'flex':'none';
-  document.getElementById('foto-meu-area').style.display=tab==='meu'?'flex':'none';
+// ─── GESTOS DETECT (MOUSE E TOUCH) ────────────────────────────────
+const fWrap = document.getElementById('fotos-wrap');
+function hideHint(){ if(!hintHidden){ hintHidden=true; const h=document.getElementById('swipe-hint'); if(h)h.style.opacity='0'; } }
+
+fWrap.addEventListener('mousedown', e=>{ startX=e.clientX; isDragging=true; fWrap.style.cursor='grabbing'; hideHint(); });
+fWrap.addEventListener('mousemove', e=>{
+  if(!isDragging) return;
+  dragDelta = e.clientX - startX;
+  const track = document.getElementById('fotos-track');
+  const largura = fWrap.clientWidth;
+  track.style.transition = 'none';
+  track.style.transform = `translateX(${-swipeIdx * largura + dragDelta}px)`;
+});
+fWrap.addEventListener('mouseup', ()=>{ if(isDragging){ isDragging=false; fWrap.style.cursor='grab'; finalizarArrasto(); }});
+fWrap.addEventListener('mouseleave', ()=>{ if(isDragging){ isDragging=false; fWrap.style.cursor='grab'; finalizarArrasto(); }});
+
+fWrap.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; isDragging=true; hideHint(); }, {passive:true});
+fWrap.addEventListener('touchmove', e=>{
+  if(!isDragging) return;
+  dragDelta = e.touches[0].clientX - startX;
+  const track = document.getElementById('fotos-track');
+  const largura = fWrap.clientWidth;
+  track.style.transition = 'none';
+  track.style.transform = `translateX(${-swipeIdx * largura + dragDelta}px)`;
+}, {passive:true});
+fWrap.addEventListener('touchend', ()=>{ isDragging=false; finalizarArrasto(); });
+
+function finalizarArrasto(){
+  if(Math.abs(dragDelta) > 50){
+    goSwipeTo(dragDelta < 0 ? 1 : 0);
+  } else {
+    goSwipeTo(swipeIdx);
+  }
+  dragDelta = 0;
 }
+
+window.addEventListener('resize', () => moverTrack(false));
 
 // ─── AÇÕES ───────────────────────────────────────────────────────
 function confirmar(){
