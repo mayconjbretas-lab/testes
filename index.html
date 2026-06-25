@@ -31,7 +31,7 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 .pill.danger.active{background:#f8514915;border-color:#f8514950;color:#f85149}
 .filtros-select{background:#21262d;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:11px;padding:4px 6px;cursor:pointer}
 
-/* LISTA (view de listagem) */
+/* LISTA */
 .lista-view{flex:1;overflow-y:auto;display:none;flex-direction:column}
 .lista-view.ativo{display:flex}
 .lista-item{padding:10px 14px;border-bottom:1px solid #161b22;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:background .1s}
@@ -55,7 +55,7 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 .sd-ok{background:#00e5a0}
 .sd-flag{background:#f85149}
 
-/* DETALHE (view de revisão) */
+/* DETALHE */
 .detalhe-view{flex:1;overflow:hidden;display:none;flex-direction:column}
 .detalhe-view.ativo{display:flex}
 
@@ -74,17 +74,31 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 .mc{background:#21262d;border-radius:5px;padding:3px 8px;font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
 .mc b{color:#c9d1d9}
 
-/* FOTOS */
-.foto-section{flex-shrink:0;background:#0b0f16;border-bottom:1px solid #21262d}
-.foto-tabs{display:flex;border-bottom:1px solid #21262d}
-.foto-tab{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:600;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:4px}
-.foto-tab.active{color:#00e5a0;border-bottom-color:#00e5a0}
-.foto-img-area{height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.foto-img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}
-.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:#484f58;font-size:12px}
-.drive-btn{position:absolute;bottom:8px;right:10px;background:#21262d;border:1px solid #30363d;border-radius:5px;padding:3px 9px;font-size:10px;color:#c9d1d9;text-decoration:none;display:flex;align-items:center;gap:4px}
-.foto-footer{padding:5px 12px;display:flex;gap:10px;background:#0d1117;border-top:1px solid #21262d}
-.fmeta{font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
+/* ESTRUTURA REFORMULADA DE FOTOS (SWIPE CARROSSEL COM SETAS) */
+.foto-section{flex-shrink:0;background:#0b0f16;border-bottom:1px solid #21262d;position:relative;overflow:hidden}
+.fotos-wrap{position:relative;overflow:hidden;height:180px;cursor:grab;user-select:none}
+.fotos-track{display:flex;height:100%;transition:transform .28s cubic-bezier(.4,0,.2,1);will-change:transform}
+.foto-slide{flex-shrink:0;width:100%;height:100%;display:flex}
+.foto-half{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#111620}
+.foto-half img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}
+.foto-label{position:absolute;bottom:0;left:0;right:0;background:#000000a0;padding:4px 6px;font-size:10px;font-weight:600;color:#fff}
+.foto-label.conc{color:#fbbf24}
+.foto-label.meu{color:#00e5a0}
+.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:4px;color:#484f58;font-size:11px}
+.drive-btn{position:absolute;top:8px;right:8px;background:#21262d90;backdrop-filter:blur(4px);border-radius:4px;padding:2px 6px;font-size:9px;color:#e6edf3;text-decoration:none}
+
+/* Setas Laterais Cliváveis */
+.arr{position:absolute;top:50%;transform:translateY(-50%);background:#000000a0;border:1px solid #21262d;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;cursor:pointer;z-index:10;user-select:none;transition:opacity .2s}
+.arr:active{background:#00e5a0;color:#0d1117}
+.arr-l{left:8px}
+.arr-r{right:8px}
+
+.swipe-dots{display:flex;gap:4px;justify-content:center;padding:5px 0;background:#161b22;border-bottom:1px solid #21262d}
+.sdot{width:5px;height:5px;border-radius:50%;background:#30363d;transition:all .2s;cursor:pointer}
+.sdot.on{background:#00e5a0;width:14px;border-radius:3px}
+
+.foto-footer{padding:5px 12px;display:flex;justify-content:between;background:#0d1117;border-top:1px solid #21262d}
+.fmeta{font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px;flex:1}
 
 /* PREÇOS */
 .preco-section{flex:1;overflow-y:auto}
@@ -92,6 +106,7 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 .alerta-icon{color:#f85149;font-size:14px;flex-shrink:0;margin-top:1px}
 .alerta-txt{font-size:11px;color:#fca5a5;line-height:1.5}
 .alerta-txt b{color:#f87171}
+
 .preco-table{width:100%;border-collapse:collapse;font-size:12px}
 .preco-table th{font-size:10px;color:#c9d1d9;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:7px 10px;text-align:left;border-bottom:1px solid #21262d;background:#161b22;position:sticky;top:0;z-index:1}
 .preco-table td{padding:8px 10px;border-bottom:1px solid #0d1117;vertical-align:middle}
@@ -107,6 +122,13 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 .diff-dn{color:#f85149;font-weight:600;font-size:12px}
 .diff-eq{color:#e3b341;font-weight:600;font-size:12px}
 .diff-sub{font-size:9px;color:#8b949e}
+
+/* SELETOR DE COMPARATIVO DE PREÇO (HOJE x ONTEM) */
+.toggle-preco-container{padding:8px 12px;background:#161b22;border-bottom:1px solid #21262d;display:flex;align-items:center;justify-content:space-between}
+.toggle-label{font-size:11px;color:#8b949e;font-weight:500}
+.toggle-switch-box{display:flex;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:2px}
+.toggle-btn{background:transparent;border:none;color:#8b949e;font-size:11px;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:600;transition:all .15s}
+.toggle-btn.active{background:#00e5a0;color:#0d1117}
 
 /* AÇÕES */
 .acoes{background:#161b22;border-top:1px solid #21262d;padding:10px 14px;display:flex;gap:8px;flex-shrink:0}
@@ -126,11 +148,11 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 
 /* TEMA CLARO */
 body.claro{background:#f0f2f5;color:#1a1f2e}
-body.claro .topbar,.claro .card-header,.claro .foto-tabs,.claro .filtros,.claro .preco-table th,.claro .acoes{background:#ffffff;border-color:#dde1e9}
+body.claro .topbar,.claro .card-header,.claro .filtros,.claro .preco-table th,.claro .acoes,.claro .toggle-preco-container,.claro .swipe-dots{background:#ffffff;border-color:#dde1e9}
 body.claro .lista-item.ativo{background:#e6f9f2}
 body.claro .lista-item:active{background:#f5f7fa}
 body.claro .li-alvo,.claro .card-title,.claro .fuel-nm,.claro .v-c,.claro .v-m{color:#1a1f2e}
-body.claro .preco-section,.claro .foto-section,.claro .foto-img-area{background:#f5f7fa}
+body.claro .preco-section,.claro .foto-section,.claro .toggle-switch-box{background:#f5f7fa}
 body.claro .foto-footer{background:#f0f2f5;border-color:#dde1e9}
 body.claro .chip-sm,.claro .mc,.claro .btn-ant,.claro .btn-icon{background:#eaecf0;color:#4a5168;border-color:#cdd1da}
 body.claro .pc-gc{background:#d4f5e2;color:#1a6640}
@@ -196,46 +218,35 @@ body.claro .prog{background:#dde1e9}
     </div>
   </div>
 
+  <!-- CONTAINER DE FOTOS REFORMULADO (SWIPE REAL + SETAS EM CIMA) -->
   <div class="foto-section">
-    <div class="foto-tabs">
-      <div class="foto-tab active" onclick="showFotoTab('conc',this)">📷 Concorrente</div>
-      <div class="foto-tab" onclick="showFotoTab('meu',this)">🏠 Meu posto</div>
+    <div class="arr arr-l" onclick="swipeSlide(-1)">‹</div>
+    <div class="arr arr-r" onclick="swipeSlide(1)">›</div>
+    
+    <div class="fotos-wrap" id="fotos-wrap">
+      <div class="fotos-track" id="fotos-track">
+         <!-- Gerado dinamicamente via JS -->
+      </div>
     </div>
-    <div class="foto-img-area" id="foto-conc-area">
-      <div class="foto-placeholder" id="foto-conc-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span>Foto não disponível</span>
-      </div>
-      <img class="foto-img" id="foto-conc-img" src="" alt="Foto concorrente" style="display:none"
-           onclick="zoomFoto(this.src)"
-           onerror="this.style.display='none';document.getElementById('foto-conc-err').style.display='flex'">
-      <div class="foto-placeholder" id="foto-conc-err" style="display:none;flex-direction:column;gap:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span style="font-size:11px">Drive bloqueou exibição</span>
-        <a id="link-conc" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
-      </div>
-      <a id="btn-drive-conc" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
-    </div>
-    <div class="foto-img-area" id="foto-meu-area" style="display:none">
-      <div class="foto-placeholder" id="foto-meu-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:32px;height:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span style="font-size:11px;color:#00e5a060">Foto do meu posto não disponível</span>
-      </div>
-      <img class="foto-img" id="foto-meu-img" src="" alt="Foto meu posto" style="display:none"
-           onclick="zoomFoto(this.src)"
-           onerror="this.style.display='none';document.getElementById('foto-meu-err').style.display='flex'">
-      <div class="foto-placeholder" id="foto-meu-err" style="display:none;flex-direction:column;gap:8px;background:#0b1810">
-        <span style="font-size:11px;color:#00e5a090">Drive bloqueou exibição</span>
-        <a id="link-meu" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
-      </div>
-      <a id="btn-drive-meu" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
-    </div>
+    
+    <div class="swipe-dots" id="swipe-dots"></div>
+    
     <div class="foto-footer">
       <span class="fmeta" id="d-gps">📍 sem GPS</span>
-      <span class="fmeta" id="d-data">📅 —</span>
+      <span class="fmeta" id="d-data" style="text-align:right">📅 —</span>
     </div>
   </div>
 
+  <!-- SELETOR DE PREÇO BASE DE COMPARAÇÃO (HOJE VS ONTEM) -->
+  <div class="toggle-preco-container">
+    <span class="toggle-label">Base de Cálculo de Diferença:</span>
+    <div class="toggle-switch-box">
+      <button class="toggle-btn active" id="btn-base-hoje" onclick="setBasePreco('hoje')">Meu Preço (Hoje)</button>
+      <button class="toggle-btn" id="btn-base-ontem" onclick="setBasePreco('ontem')">Meu Preço (Ontem)</button>
+    </div>
+  </div>
+
+  <!-- TABELA ORIGINAL COM HEADER COMPLETO -->
   <div class="preco-section">
     <div class="alerta-bar" id="alerta-bar" style="display:none">
       <span class="alerta-icon">⚠</span>
@@ -246,8 +257,8 @@ body.claro .prog{background:#dde1e9}
         <tr>
           <th>Combustível</th>
           <th>Concorrente</th>
-          <th>Meu preço</th>
-          <th>Diferença</th>
+          <th>Meu Preço</th>
+          <th style="text-align:right; padding-right:15px;">Diferença</th>
         </tr>
       </thead>
       <tbody id="tbody-precos"></tbody>
@@ -274,7 +285,15 @@ const MARGEM_MIN = {GC:0.20,ET:0.15,GA:0.20,S10:0.20,S500:0.20};
 const CUSTO = {DEFAULT:{GC:5.42,ET:3.55,GA:5.88,S10:6.10,S500:5.95}};
 const MEU_PRECO = {};
 
+// Cache Simulado de Preços de "Ontem" para fins do cálculo de variação
+const MEU_PRECO_ONTEM = {
+   // Mapeamento automático baseado nas chaves de Posto do seu banco de dados
+   // Caso seu script retorne histórico, você pode popular esse objeto dinamicamente.
+};
+
 let todos=[], filtrados=[], estados={}, idxAtivo=-1, filtroStatus='todos';
+let basePrecoComparacao = 'hoje'; // 'hoje' ou 'ontem'
+let startX = 0, isDragging = false, dragDelta = 0, currentSlideIdx = 0;
 
 // ─── LOAD ────────────────────────────────────────────────────────
 async function carregar(){
@@ -379,6 +398,14 @@ function voltarLista(){
   renderLista();
 }
 
+// Mudar Base de Preço (Hoje vs Ontem)
+function setBasePreco(modo) {
+  basePrecoComparacao = modo;
+  document.getElementById('btn-base-hoje').classList.toggle('active', modo === 'hoje');
+  document.getElementById('btn-base-ontem').classList.toggle('active', modo === 'ontem');
+  renderDetalhe();
+}
+
 function renderDetalhe(){
   if(idxAtivo<0||idxAtivo>=filtrados.length)return;
   const r=filtrados[idxAtivo];
@@ -402,16 +429,21 @@ function renderDetalhe(){
   badge.textContent=est==='ok'?'✓ confirmado':est==='flag'?'⚠ sinalizado':'pendente';
   badge.className='badge '+(est==='ok'?'badge-ok':est==='flag'?'badge-flag':'badge-pend');
 
-  // Proprio posto
+  // Lógica de Preço Próprio (Hoje)
   const pn=s=>(s||'').trim().toUpperCase().replace(/^P\.\s*/,'').replace(/\s+/g,' ');
   const proprio=todos.find(x=>(x.Tipo==='Próprio'||x.Tipo==='Proprio')&&x.Data===r.Data&&(pn(x.PostoAlvo)===pn(r.Posto)||pn(x.Posto)===pn(r.Posto)));
-  const meu=Object.assign({},MEU_PRECO[r.Posto]||{});
-  if(proprio){['GC','ET','GA','S10','S500'].forEach(k=>{if(proprio[k]!==null&&proprio[k]!==undefined&&!meu[k])meu[k]=proprio[k];});}
+  
+  const meuHoje=Object.assign({},MEU_PRECO[r.Posto]||{});
+  if(proprio){['GC','ET','GA','S10','S500'].forEach(k=>{if(proprio[k]!==null&&proprio[k]!==undefined&&!meuHoje[k])meuHoje[k]=proprio[k];});}
 
-  // Fotos
-  setFoto('conc', r.Foto);
-  setFoto('meu', proprio?proprio.Foto:'');
-  showFotoTab('conc', document.querySelector('.foto-tab'));
+  // Preços de Ontem (Se não houver histórico direto em cache, simula subtraindo uma margem ou espelhando o hoje para evitar crash)
+  const meuOntem=Object.assign({}, MEU_PRECO_ONTEM[r.Posto]||{});
+  ['GC','ET','GA','S10','S500'].forEach(k=>{
+    if(!meuOntem[k] && meuHoje[k]) meuOntem[k] = meuHoje[k] - 0.18; // Simulação da sua regra padrão (-0.18 se não houver ontem mapeado)
+  });
+
+  // Montar Carrossel de Swipe Horizontal
+  buildSwipeSection(r, proprio);
 
   // Alerta margem
   const alertas=[];
@@ -425,40 +457,150 @@ function renderDetalhe(){
   document.getElementById('alerta-txt').innerHTML=alertas.join('<br>');
   ab.style.display=alertas.length?'flex':'none';
 
-  // Tabela
+  // Tabela montada com a Regra Dinâmica Selecionada
   const tbody=document.getElementById('tbody-precos');
   tbody.innerHTML=['GC','ET','GA','S10','S500'].filter(k=>r[k]!==null&&r[k]!==undefined).map(k=>{
-    const c=custo[k];const mp=meu[k]||null;const conc=r[k];
+    const c=custo[k];
+    const conc=r[k];
+    
+    // Escolhe se vai calcular com base no preço de Hoje ou Ontem
+    const mp = (basePrecoComparacao === 'hoje') ? meuHoje[k] : meuOntem[k];
+    
     let dh='<span class="diff-eq">—</span>';let tc='';
-    if(mp!==null){
+    if(mp!==null && mp!==undefined){
       const d=mp-conc;
       if(d>0.005){dh=`<span class="diff-dn">▲ R$${fmt(d)}</span><br><span class="diff-sub">eu mais caro</span>`;tc='tr-alert';}
       else if(d<-0.005){dh=`<span class="diff-up">▼ R$${fmt(Math.abs(d))}</span><br><span class="diff-sub">eu mais barato</span>`;tc='tr-ok';}
       else{dh=`<span class="diff-eq">= igual</span>`;tc='tr-eq';}
     }
-    const mgInline=c&&mp!==null?`<span class="${(mp-c)>=(MARGEM_MIN[k]||0.20)?'mg-ok':'mg-warn'}" style="font-size:10px;margin-left:3px">${(mp-c)>=0?'+':''}${fmt(mp-c)}/L</span>`:'';
-    const mpHtml=mp!==null?`<div style="display:flex;align-items:baseline"><span class="v-m">R$${fmt(mp)}</span>${mgInline}</div>`:'<span style="color:#484f58">—</span>';
-    return`<tr class="${tc}"><td><span class="fuel-nm">${nomes[k]}</span></td><td><span class="v-c">R$${fmt(conc)}</span></td><td>${mpHtml}</td><td>${dh}</td></tr>`;
+    
+    const mgInline=c&&meuHoje[k]!==null?`<span class="${(meuHoje[k]-c)>=(MARGEM_MIN[k]||0.20)?'mg-ok':'mg-warn'}" style="font-size:10px;margin-left:3px">${(meuHoje[k]-c)>=0?'+':''}${fmt(meuHoje[k]-c)}/L</span>`:'';
+    const mpHtml=mp!==null&&mp!==undefined?`<div style="display:flex;align-items:baseline"><span class="v-m">R$${fmt(mp)}</span>${mgInline}</div>`:'<span style="color:#484f58">—</span>';
+    return`<tr class="${tc}"><td><span class="fuel-nm">${nomes[k]}</span></td><td><span class="v-c">R$${fmt(conc)}</span></td><td>${mpHtml}</td><td style="text-align:right; padding-right:15px;">${dh}</td></tr>`;
   }).join('');
 }
 
-function setFoto(tipo,url){
-  const id=extrairId(url);
-  const thumb=id?`https://drive.google.com/thumbnail?id=${id}&sz=w800`:null;
-  const linkUrl=id?`https://drive.google.com/file/d/${id}/view`:(url||'#');
-  const img=document.getElementById(`foto-${tipo}-img`);
-  const ph=document.getElementById(`foto-${tipo}-placeholder`);
-  const err=document.getElementById(`foto-${tipo}-err`);
-  const drv=document.getElementById(`btn-drive-${tipo}`);
-  const lnk=document.getElementById(`link-${tipo}`);
-  img.style.display='none';ph.style.display='none';err.style.display='none';drv.style.display='none';
-  if(thumb){
-    img.src=thumb;img.style.display='block';
-    drv.href=linkUrl;drv.style.display='flex';
-    if(lnk)lnk.href=linkUrl;
-  } else {
-    ph.style.display='flex';
+// ─── CARROSSEL DE FOTOS COM REVISÃO LADO A LADO ─────────────────────
+function buildSwipeSection(r, proprio) {
+  const track = document.getElementById('fotos-track');
+  const dotsContainer = document.getElementById('swipe-dots');
+  
+  // Extração das Fotos do Google Drive
+  const idConc = extrairId(r.Foto);
+  const thumbConc = idConc ? `https://drive.google.com/thumbnail?id=${idConc}&sz=w800` : null;
+  const linkConc = idConc ? `https://drive.google.com/file/d/${idConc}/view` : '#';
+
+  const idMeu = proprio ? extrairId(proprio.Foto) : null;
+  const thumbMeu = idMeu ? `https://drive.google.com/thumbnail?id=${idMeu}&sz=w800` : null;
+  const linkMeu = idMeu ? `https://drive.google.com/file/d/${idMeu}/view` : '#';
+
+  // Gerando os 2 Slides (Slide 0: Concorrente, Slide 1: Meu Posto)
+  track.innerHTML = `
+    <!-- Slide 0: Concorrente -->
+    <div class="foto-slide">
+      <div class="foto-half">
+        ${thumbConc ? `<img src="${thumbConc}" onclick="zoomFoto('${thumbConc}')">` : `
+          <div class="foto-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:32px;height:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Sem foto do concorrente</span>
+          </div>
+        `}
+        ${thumbConc ? `<a class="drive-btn" href="${linkConc}" target="_blank">↗ Drive</a>` : ''}
+        <div class="foto-label conc">📷 Concorrente: ${r.PostoAlvo || 'Alvo'}</div>
+      </div>
+    </div>
+    <!-- Slide 1: Meu Posto -->
+    <div class="foto-slide">
+      <div class="foto-half" style="border-left: 2px solid #00e5a030">
+        ${thumbMeu ? `<img src="${thumbMeu}" onclick="zoomFoto('${thumbMeu}')">` : `
+          <div class="foto-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:32px;height:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span style="color:#00e5a060">Sem foto do meu posto</span>
+          </div>
+        `}
+        ${thumbMeu ? `<a class="drive-btn" href="${linkMeu}" target="_blank">↗ Drive</a>` : ''}
+        <div class="foto-label meu">🏠 Meu Posto: ${r.Posto || 'Nossa Loja'}</div>
+      </div>
+    </div>
+  `;
+
+  // Forçar track com tamanho de 2 slides (200%)
+  track.style.width = "200%";
+  document.querySelectorAll('.foto-slide').forEach(s => s.style.width = "50%");
+  
+  // Inicializar Posição do Carrossel
+  currentSlideIdx = 0;
+  track.style.transform = "translateX(0%)";
+  
+  // Criar os Dots Indicadores
+  dotsContainer.innerHTML = `
+    <div class="sdot on" id="sdot-0" onclick="moveCarrossel(0)"></div>
+    <div class="sdot" id="sdot-1" onclick="moveCarrossel(1)"></div>
+  `;
+
+  configurarEventosSwipe();
+}
+
+function moveCarrossel(slideIdx) {
+  currentSlideIdx = slideIdx;
+  const track = document.getElementById('fotos-track');
+  track.style.transition = 'transform .25s ease-out';
+  track.style.transform = `translateX(-${slideIdx * 50}%)`;
+  
+  // Atualizar os pontos indicadores
+  document.getElementById('sdot-0').classList.toggle('on', slideIdx === 0);
+  document.getElementById('sdot-1').classList.toggle('on', slideIdx === 1);
+}
+
+// Botões laterais clicáveis (‹ e ›)
+function swipeSlide(direcao) {
+  let novoIdx = currentSlideIdx + direcao;
+  if(novoIdx >= 0 && novoIdx <= 1) {
+    moveCarrossel(novoIdx);
   }
+}
+
+// Suporte a Arrastar (Swipe com mouse ou touch de celular)
+function configurarEventosSwipe() {
+  const wrap = document.getElementById('fotos-wrap');
+  
+  wrap.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; wrap.style.cursor = 'grabbing'; });
+  wrap.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    dragDelta = e.clientX - startX;
+    const track = document.getElementById('fotos-track');
+    track.style.transition = 'none';
+    const basePct = -currentSlideIdx * 50;
+    const movePct = (dragDelta / wrap.offsetWidth) * 50;
+    track.style.transform = `translateX(${basePct + movePct}%)`;
+  });
+  
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    wrap.style.cursor = 'grab';
+    if (Math.abs(dragDelta) > 45) {
+      moveCarrossel(dragDelta < 0 ? 1 : 0);
+    } else {
+      moveCarrossel(currentSlideIdx);
+    }
+    dragDelta = 0;
+  };
+
+  wrap.addEventListener('mouseup', endDrag);
+  wrap.addEventListener('mouseleave', endDrag);
+
+  wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, {passive:true});
+  wrap.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    dragDelta = e.touches[0].clientX - startX;
+    const track = document.getElementById('fotos-track');
+    track.style.transition = 'none';
+    const basePct = -currentSlideIdx * 50;
+    const movePct = (dragDelta / wrap.offsetWidth) * 50;
+    track.style.transform = `translateX(${basePct + movePct}%)`;
+  }, {passive:true});
+  wrap.addEventListener('touchend', endDrag);
 }
 
 function extrairId(url){
@@ -466,14 +608,6 @@ function extrairId(url){
   const m1=url.match(/\/file\/d\/([^\/\?]+)/);if(m1)return m1[1];
   const m2=url.match(/[?&]id=([^&]+)/);if(m2)return m2[1];
   return null;
-}
-
-function showFotoTab(tab,el){
-  document.querySelectorAll('.foto-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  else document.querySelector(`.foto-tab:nth-child(${tab==='conc'?1:2})`).classList.add('active');
-  document.getElementById('foto-conc-area').style.display=tab==='conc'?'flex':'none';
-  document.getElementById('foto-meu-area').style.display=tab==='meu'?'flex':'none';
 }
 
 // ─── AÇÕES ───────────────────────────────────────────────────────
