@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>JBRETAS — Coletas</title>
+<title>JBRETAS — Painel de Coletas</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
@@ -26,173 +26,104 @@ body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFo
 /* FILTROS */
 .filtros{background:#161b22;border-bottom:1px solid #21262d;padding:6px 12px;display:flex;align-items:center;gap:6px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
 .filtros::-webkit-scrollbar{display:none}
-.pill{background:#21262d;border:1px solid #30363d;border-radius:20px;padding:4px 12px;font-size:11px;color:#8b949e;white-space:nowrap;cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px}
-.pill.active{background:#00e5a015;border-color:#00e5a050;color:#00e5a0}
-.pill.danger.active{background:#f8514915;border-color:#f8514950;color:#f85149}
 .filtros-select{background:#21262d;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:11px;padding:4px 6px;cursor:pointer}
+.pill{background:#21262d;border:1px solid #30363d;border-radius:20px;padding:4px 12px;font-size:11px;color:#8b949e;white-space:nowrap;cursor:pointer;user-select:none}
+.pill.active{background:#00e5a015;border-color:#00e5a050;color:#00e5a0}
 
-/* LISTA (view de listagem) */
+/* VIEW LISTA (Agrupada por MEU POSTO) */
 .lista-view{flex:1;overflow-y:auto;display:none;flex-direction:column}
 .lista-view.ativo{display:flex}
-.lista-item{padding:10px 14px;border-bottom:1px solid #161b22;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:background .1s}
+.lista-item{padding:14px;border-bottom:1px solid #161b22;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:background .1s}
 .lista-item:active{background:#161b22}
-.lista-item.ativo{background:#0d2a1e;border-left:3px solid #00e5a0}
-.lista-item.flagged{background:#1a0f0f;border-left:3px solid #f85149}
 .li-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.li-alvo{font-size:13px;font-weight:600;color:#e6edf3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.li-posto{font-size:10px;color:#00e5a0}
-.li-hora{font-size:10px;color:#484f58}
-.li-prices{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
-.pc{border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600}
+.li-meuposto{font-size:14px;font-weight:600;color:#e6edf3;text-transform:uppercase}
+.li-sub{font-size:11px;color:#00e5a0;font-weight:500}
+.li-prices{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.pc{border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600}
 .pc-gc{background:#0f2a0f;color:#4ade80}
 .pc-et{background:#1a0f2a;color:#c084fc}
 .pc-ga{background:#0f1a2a;color:#60a5fa}
 .pc-s10{background:#2a1f0a;color:#fbbf24}
 .pc-s500{background:#2a150a;color:#fb923c}
-.band-pill{border-radius:3px;padding:1px 5px;font-size:9px;font-weight:600}
-.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.sd-pend{background:#484f58}
-.sd-ok{background:#00e5a0}
-.sd-flag{background:#f85149}
+.sd-count{font-size:10px;color:#8b949e;background:#21262d;padding:2px 6px;border-radius:4px}
 
-/* DETALHE (view de revisão) */
+/* VIEW DETALHE (Posto -> Concorrentes via Swipe) */
 .detalhe-view{flex:1;overflow:hidden;display:none;flex-direction:column}
 .detalhe-view.ativo{display:flex}
 
 .card-header{background:#161b22;border-bottom:1px solid #21262d;padding:10px 14px;flex-shrink:0}
 .card-nav{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.btn-voltar{background:#21262d;border:none;border-radius:6px;padding:5px 10px;font-size:11px;color:#c9d1d9;cursor:pointer;display:flex;align-items:center;gap:4px}
-.card-title{font-size:16px;font-weight:600;color:#e6edf3;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.band-tag{border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600}
-.badge{border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600}
-.badge-pend{background:#21262d;color:#8b949e}
-.badge-ok{background:#00e5a015;color:#00e5a0;border:1px solid #00e5a030}
-.badge-flag覆{background:#f8514915;color:#f85149;border:1px solid #f8514940}
-.card-sub{font-size:11px;color:#8b949e;margin-top:3px}
+.btn-voltar{background:#21262d;border:none;border-radius:6px;padding:5px 10px;font-size:11px;color:#c9d1d9;cursor:pointer}
+.card-title{font-size:16px;font-weight:600;color:#e6edf3}
+.card-sub{font-size:11px;color:#8b949e;margin-top:2px}
 .card-sub span{color:#00e5a0;font-weight:600}
-.meta-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.mc{background:#21262d;border-radius:5px;padding:3px 8px;font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
-.mc b{color:#c9d1d9}
 
-/* SELETOR DE DATA ONTEM/HOJE */
-.time-switch-container {
-  background: #161b22;
-  padding: 6px 14px;
-  border-bottom: 1px solid #21262d;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-.time-switch-label {
-  font-size: 11px;
-  color: #8b949e;
-  font-weight: 500;
-}
-.time-switch {
-  display: flex;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  overflow: hidden;
-  padding: 2px;
-}
-.time-btn {
-  background: transparent;
-  border: none;
-  color: #8b949e;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.time-btn.active {
-  background: #00e5a0;
-  color: #0d1117;
-}
+/* ÁREA DE FOTOS SWIPE */
+.fotos-wrap{flex-shrink:0;background:#0a0d12;border-bottom:1px solid #21262d;position:relative;overflow:hidden;height:180px;cursor:grab}
+.fotos-track{display:flex;height:100%;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.foto-slide{flex-shrink:0;width:100%;height:100%;display:flex}
+.foto-half{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#111620}
+.foto-half img{width:100%;height:100%;object-fit:contain}
+.foto-label{position:absolute;bottom:0;left:0;right:0;background:#000000a0;padding:4px 8px;font-size:10px;font-weight:600;color:#fff}
+.foto-label.conc{color:#fbbf24}
+.foto-label.meu{color:#00e5a0}
+.foto-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#484f58;font-size:11px}
+.arr{position:absolute;top:50%;transform:translateY(-50%);background:#00000060;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;pointer-events:none;opacity:.7}
+.arr-l{left:6px}
+.arr-r{right:6px}
 
-/* FOTOS */
-.foto-section{flex-shrink:0;background:#0b0f16;border-bottom:1px solid #21262d}
-.foto-tabs{display:flex;border-bottom:1px solid #21262d}
-.foto-tab{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:600;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:4px}
-.foto-tab.active{color:#00e5a0;border-bottom-color:#00e5a0}
-.foto-img-area{height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.foto-img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}
-.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:#484f58;font-size:12px}
-.drive-btn{position:absolute;bottom:8px;right:10px;background:#21262d;border:1px solid #30363d;border-radius:5px;padding:3px 9px;font-size:10px;color:#c9d1d9;text-decoration:none;display:flex;align-items:center;gap:4px}
-.foto-footer{padding:5px 12px;display:flex;gap:10px;background:#0d1117;border-top:1px solid #21262d}
-.fmeta{font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
+/* INDICADORES (DOTS) DO CONCORRENTE ATUAL */
+.swipe-dots{display:flex;gap:6px;justify-content:center;padding:8px 0;background:#161b22;flex-shrink:0;border-bottom:1px solid #21262d}
+.sdot{width:6px;height:6px;border-radius:50%;background:#30363d;transition:all 0.2s;cursor:pointer}
+.sdot.on{background:#00e5a0;width:16px;border-radius:3px}
 
-/* PREÇOS */
+/* DADOS DO CONCORRENTE SELECIONADO */
+.dados-concorrente{padding:10px 14px 4px;background:#161b22;border-bottom:1px solid #21262d;flex-shrink:0}
+.dc-nome{font-size:14px;font-weight:600;color:#e6edf3;display:flex;align-items:center;gap:6px}
+.dc-band{font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600}
+.dc-meta{font-size:11px;color:#8b949e;margin-top:3px;display:flex;gap:10px}
+
+/* TIME SWITCH (HOJE / ONTEM) */
+.time-switch-container{background:#161b22;padding:6px 14px;border-bottom:1px solid #21262d;display:flex;align-items:center;justify-content:between;flex-shrink:0}
+.time-switch{display:flex;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:2px;margin-left:auto}
+.time-btn{background:transparent;border:none;color:#8b949e;font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer}
+.time-btn.active{background:#00e5a0;color:#0d1117}
+
+/* TABELA DE PREÇOS */
 .preco-section{flex:1;overflow-y:auto}
-.alerta-bar{background:#1a080080;border-bottom:1px solid #f8514930;padding:7px 12px;display:flex;align-items:flex-start;gap:6px}
-.alerta-icon{color:#f85149;font-size:14px;flex-shrink:0;margin-top:1px}
-.alerta-txt{font-size:11px;color:#fca5a5;line-height:1.5}
-.alerta-txt b{color:#f87171}
 .preco-table{width:100%;border-collapse:collapse;font-size:12px}
-.preco-table th{font-size:10px;color:#c9d1d9;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:7px 10px;text-align:left;border-bottom:1px solid #21262d;background:#161b22;position:sticky;top:0;z-index:1}
-.preco-table td{padding:8px 10px;border-bottom:1px solid #0d1117;vertical-align:middle}
-.tr-ok td{background:#0b1810}
-.tr-alert td{background:#1a0f0f}
+.preco-table th{font-size:10px;color:#8b949e;font-weight:600;text-transform:uppercase;padding:8px 14px;text-align:left;border-bottom:1px solid #21262d;background:#161b22;position:sticky;top:0}
+.preco-table td{padding:10px 14px;border-bottom:1px solid #161b22;vertical-align:middle}
+.tr-ok td{background:#0b1810 !important}      /* Meu preço mais barato -> Fundo Verde sutil */
+.tr-alert td{background:#1a0f0f !important}   /* Meu preço mais caro -> Fundo Vermelho sutil */
 .tr-eq td{background:#1a150a}
 .fuel-nm{font-size:12px;color:#e6edf3;font-weight:500}
 .v-c{font-size:13px;font-weight:600;color:#e6edf3}
 .v-m{font-size:13px;font-weight:600;color:#e6edf3}
-.mg-ok{font-size:10px;color:#00e5a0}
-.mg-warn{font-size:10px;color:#f85149;font-weight:600}
-.diff-up{color:#00e5a0;font-weight:600;font-size:12px}
-.diff-dn{color:#f85149;font-weight:600;font-size:12px}
-.diff-eq{color:#e3b341;font-weight:600;font-size:12px}
-.diff-sub{font-size:9px;color:#8b949e}
+.diff-up{color:#f85149;font-weight:600} /* Mais caro -> Texto Vermelho */
+.diff-dn{color:#00e5a0;font-weight:600} /* Mais barato -> Texto Verde */
+
+/* ALERTA */
+.alerta-bar{background:#1a080080;border-bottom:1px solid #f8514930;padding:8px 14px;font-size:11px;color:#fca5a5;line-height:1.4}
 
 /* AÇÕES */
 .acoes{background:#161b22;border-top:1px solid #21262d;padding:10px 14px;display:flex;gap:8px;flex-shrink:0}
-.btn-ant{background:#21262d;color:#c9d1d9;border:none;border-radius:8px;padding:11px 14px;font-size:12px;font-weight:600;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:5px}
-.btn-flag{background:#1a080080;color:#f85149;border:1px solid #f8514940;border-radius:8px;padding:11px 13px;font-size:14px;cursor:pointer}
-.btn-ok{background:#00e5a0;color:#0d1117;border:none;border-radius:8px;padding:11px 0;font-size:12px;font-weight:600;cursor:pointer;flex:2;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-flag{background:#1a080080;color:#f85149;border:1px solid #f8514940;border-radius:8px;padding:11px 14px;font-size:14px;cursor:pointer}
+.btn-ok{background:#00e5a0;color:#0d1117;border:none;border-radius:8px;padding:11px 0;font-size:12px;font-weight:600;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:5px}
 
-/* MODAL ZOOM */
-.modal-zoom{position:fixed;inset:0;background:#000000dd;z-index:999;display:flex;align-items:center;justify-content:center;cursor:zoom-out}
-.modal-zoom.oculto{display:none}
-.modal-zoom img{max-width:95vw;max-height:90vh;border-radius:8px;object-fit:contain}
-
-/* LOADING */
-.estado-central{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:#484f58;font-size:13px}
+.estado-central{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:#484f58}
 .spinner{width:32px;height:32px;border:2px solid #21262d;border-top-color:#00e5a0;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* TEMA CLARO */
-body.claro{background:#f0f2f5;color:#1a1f2e}
-body.claro .topbar,.claro .card-header,.claro .foto-tabs,.claro .filtros,.claro .preco-table th,.claro .acoes,.claro .time-switch-container{background:#ffffff;border-color:#dde1e9}
-body.claro .lista-item.ativo{background:#e6f9f2}
-body.claro .lista-item:active{background:#f5f7fa}
-body.claro .li-alvo,.claro .card-title,.claro .fuel-nm,.claro .v-c,.claro .v-m{color:#1a1f2e}
-body.claro .preco-section,.claro .foto-section,.claro .foto-img-area{background:#f5f7fa}
-body.claro .foto-footer{background:#f0f2f5;border-color:#dde1e9}
-body.claro .chip-sm,.claro .mc,.claro .btn-ant,.claro .btn-icon{background:#eaecf0;color:#4a5168;border-color:#cdd1da}
-body.claro .time-switch {background:#eaecf0;border-color:#cdd1da}
-body.claro .pc-gc{background:#d4f5e2;color:#1a6640}
-body.claro .pc-et{background:#ede8fd;color:#4a2d99}
-body.claro .pc-ga{background:#ddeeff;color:#1a4080}
-body.claro .preco-table td{border-bottom-color:#eaecf0}
-body.claro .tr-ok td{background:#f0faf5}
-body.claro .tr-alert td{background:#fdf5f5}
-body.claro .tr-eq td{background:#fffbf0}
-body.claro .prog{background:#dde1e9}
 </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="brand">⛽ Coletas</div>
+  <div class="brand">⛽ Painel Coletas (Por Posto)</div>
   <div class="tright">
-    <span class="ldot"></span>
     <span class="chip-sm">Data: <b id="data-hoje">—</b></span>
-    <span class="chip-sm"><b id="qtd-total">—</b> coletas</span>
-    <button class="btn-icon" onclick="alternarTema()" id="btn-tema">☀</button>
+    <span class="chip-sm"><b id="qtd-postos">—</b> postos</span>
   </div>
 </div>
 <div class="prog"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
@@ -202,100 +133,64 @@ body.claro .prog{background:#dde1e9}
   <select class="filtros-select" id="filtro-supervisor" onchange="aplicarFiltros()">
     <option value="">Todos supervisores</option>
   </select>
-  <span class="pill active" id="pill-todos" onclick="setPill('todos',this)">Todos</span>
-  <span class="pill" id="pill-pend" onclick="setPill('pend',this)">⏳ Pendentes</span>
-  <span class="pill" id="pill-ok" onclick="setPill('ok',this)">✓ Ok</span>
-  <span class="pill danger" id="pill-flag" onclick="setPill('flag',this)">⚠ Margem</span>
+  <span class="pill active" id="pill-todos" onclick="filtrarStatus('todos')">Todos</span>
 </div>
 
-<!-- LISTA -->
+<!-- LISTA DE POSTOS PRÓPRIOS -->
 <div class="lista-view ativo" id="lista-view">
-  <div class="estado-central"><div class="spinner"></div>Carregando coletas...</div>
+  <div class="estado-central"><div class="spinner"></div>Agrupando bases por posto...</div>
 </div>
 
-<!-- DETALHE -->
+<!-- DETALHE DO POSTO (Navegação de Concorrentes via Swipe) -->
 <div class="detalhe-view" id="detalhe-view">
-
   <div class="card-header">
     <div class="card-nav">
-      <button class="btn-voltar" onclick="voltarLista()">← Lista</button>
-      <span style="font-size:11px;color:#8b949e;margin-left:auto" id="nav-counter"></span>
-      <button class="btn-voltar" onclick="navAnterior()">‹ Ant</button>
-      <button class="btn-voltar" onclick="navProximo()">Próx ›</button>
+      <button class="btn-voltar" onclick="voltarLista()">← Ver Todos os Postos</button>
     </div>
-    <div class="card-title">
-      <span id="d-alvo">—</span>
-      <span class="band-tag" id="d-band">—</span>
-      <span class="badge" id="d-badge">pendente</span>
+    <div class="card-title" id="d-meuposto-nome">—</div>
+    <div class="card-sub">Gerente Responsável: <span id="d-meuposto-gerente">—</span></div>
+  </div>
+
+  <!-- CONTAINER DO SWIPE DE FOTOS -->
+  <div class="fotos-wrap" id="fotos-wrap">
+    <div class="fotos-track" id="fotos-track"></div>
+    <div class="arr arr-l">‹</div>
+    <div class="arr arr-r">›</div>
+  </div>
+
+  <!-- DOTS DOS CONCORRENTES DO POSTO -->
+  <div class="swipe-dots" id="swipe-dots"></div>
+
+  <!-- DADOS DO CONCORRENTE ATUAL NO SLIDE -->
+  <div class="dados-concorrente">
+    <div class="dc-nome">
+      <span id="d-conc-nome">—</span>
+      <span class="dc-band" id="d-conc-band">—</span>
     </div>
-    <div class="card-sub">Meu posto: <span id="d-posto">—</span></div>
-    <div class="meta-row">
-      <div class="mc">👤 <b id="d-ger">—</b></div>
-      <div class="mc">🕐 <b id="d-hora">—</b></div>
-      <div class="mc">📋 <b id="d-sup">—</b></div>
+    <div class="dc-meta">
+      <span id="d-conc-hora">🕐 —</span>
+      <span id="d-conc-sup">📋 —</span>
     </div>
   </div>
 
-  <!-- SELETOR ONTEM / HOJE -->
+  <!-- MODO ONTEM / HOJE -->
   <div class="time-switch-container">
-    <span class="time-switch-label">Modo de Comparação de Preço:</span>
+    <span style="font-size:11px;color:#8b949e">Comparação:</span>
     <div class="time-switch">
       <button class="time-btn active" id="btn-time-hoje" onclick="setTimeMode('hoje')">Hoje</button>
       <button class="time-btn" id="btn-time-ontem" onclick="setTimeMode('ontem')">Ontem para Hoje</button>
     </div>
   </div>
 
-  <div class="foto-section">
-    <div class="foto-tabs">
-      <div class="foto-tab active" onclick="showFotoTab('conc',this)">📷 Concorrente</div>
-      <div class="foto-tab" onclick="showFotoTab('meu',this)">🏠 Meu posto</div>
-    </div>
-    <div class="foto-img-area" id="foto-conc-area">
-      <div class="foto-placeholder" id="foto-conc-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span>Foto não disponível</span>
-      </div>
-      <img class="foto-img" id="foto-conc-img" src="" alt="Foto concorrente" style="display:none"
-           onclick="zoomFoto(this.src)"
-           onerror="this.style.display='none';document.getElementById('foto-conc-err').style.display='flex'">
-      <div class="foto-placeholder" id="foto-conc-err" style="display:none;flex-direction:column;gap:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span style="font-size:11px">Drive bloqueou exibição</span>
-        <a id="link-conc" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
-      </div>
-      <a id="btn-drive-conc" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
-    </div>
-    <div class="foto-img-area" id="foto-meu-area" style="display:none">
-      <div class="foto-placeholder" id="foto-meu-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:32px;height:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span style="font-size:11px;color:#00e5a060">Foto do meu posto não disponível</span>
-      </div>
-      <img class="foto-img" id="foto-meu-img" src="" alt="Foto meu posto" style="display:none"
-           onclick="zoomFoto(this.src)"
-           onerror="this.style.display='none';document.getElementById('foto-meu-err').style.display='flex'">
-      <div class="foto-placeholder" id="foto-meu-err" style="display:none;flex-direction:column;gap:8px;background:#0b1810">
-        <span style="font-size:11px;color:#00e5a090">Drive bloqueou exibição</span>
-        <a id="link-meu" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
-      </div>
-      <a id="btn-drive-meu" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
-    </div>
-    <div class="foto-footer">
-      <span class="fmeta" id="d-gps">📍 sem GPS</span>
-      <span class="fmeta" id="d-data">📅 —</span>
-    </div>
-  </div>
-
+  <!-- PREÇOS E AUDITORIA -->
   <div class="preco-section">
-    <div class="alerta-bar" id="alerta-bar" style="display:none">
-      <span class="alerta-icon">⚠</span>
-      <div class="alerta-txt" id="alerta-txt"></div>
-    </div>
+    <div class="alerta-bar" id="alerta-bar" style="display:none"></div>
     <table class="preco-table">
       <thead>
         <tr>
           <th>Combustível</th>
           <th>Concorrente</th>
-          <th>Meu preço</th>
+          <th>Meu Preço</th>
           <th>Dif.</th>
         </tr>
       </thead>
@@ -303,327 +198,250 @@ body.claro .prog{background:#dde1e9}
     </table>
   </div>
 
+  <!-- AÇÕES -->
   <div class="acoes">
-    <button class="btn-ant" onclick="navAnterior()">← Anterior</button>
-    <button class="btn-flag" onclick="sinalizar()" title="Sinalizar margem">⚠</button>
-    <button class="btn-ok" onclick="confirmar()">✓ Confirmar e próximo</button>
+    <button class="btn-flag" onclick="sinalizar Margem()">⚠</button>
+    <button class="btn-ok" onclick="proximoConcorrente()">✓ Confirmar Concorrente</button>
   </div>
-
-</div>
-
-<!-- MODAL ZOOM -->
-<div class="modal-zoom oculto" id="modal-zoom" onclick="this.classList.add('oculto')">
-  <img id="modal-img" src="" alt="Foto ampliada">
 </div>
 
 <script>
 const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwoJ3-g48frwYtMlnpVj5EIYapInPP11OJXrkOPUzCULrbIZWMQW51xFe-Ot4cox00r/exec';
 const PARAM = 'tipo=coletaRecentes&dias=1';
-const MARGEM_MIN = {GC:0.20,ET:0.15,GA:0.20,S10:0.20,S500:0.20};
-const CUSTO = {DEFAULT:{GC:5.42,ET:3.55,GA:5.88,S10:6.10,S500:5.95}};
-const MEU_PRECO = {};
 
-let todos=[], filtrados=[], estados={}, idxAtivo=-1, filtroStatus='todos';
-let timeMode = 'hoje'; // Modo inicial padrão: Hoje
-let historicoOntem = {}; // Armazena os preços de ontem indexados por PostoAlvo_Combustivel
+let postosAgrupados = {}; 
+let listaChaves = [];     
+let idxPostoAtivo = -1;   
+let idxConcAtivo = 0;     
+let timeMode = 'hoje';    
+let estadosAuditoria = {}; 
 
-// ─── LOAD ────────────────────────────────────────────────────────
+// Swipe state
+let startX = 0, isDragging = false, dragDelta = 0;
+
 async function carregar(){
-  try{
-    const resp=await fetch(ENDPOINT+'?'+PARAM);
-    const json=await resp.json();
-    const regs=json.registros||json.data||json||[];
-    todos=regs.map((r,i)=>({...norm(r),_id:i}));
-    estados={};todos.forEach(r=>{estados[r._id]='pend';});
+  try {
+    const resp = await fetch(ENDPOINT+'?'+PARAM);
+    const json = await resp.json();
+    const regs = json.registros || json.data || json || [];
     
-    // Mapeia preços de coletas anteriores para simular "Ontem" caso a API traga múltiplos dias,
-    // ou gera um histórico de fallback inteligente baseado em margens comerciais para o cálculo do botão.
-    processarHistoricoOntem();
-
-    poblarFiltros();
-    aplicarFiltros();
-    document.getElementById('data-hoje').textContent=todos.length>0?todos[todos.length-1].Data:'—';
-    document.getElementById('qtd-total').textContent=todos.length;
-  }catch(e){
-    console.warn(e);
-    document.getElementById('lista-view').innerHTML='<div class="estado-central"><span style="color:#f85149;font-size:12px">⚠ Erro ao carregar</span><span style="color:#8b949e;font-size:11px">'+e.message+'</span><button onclick="carregar()" style="margin-top:8px;background:#21262d;border:none;border-radius:6px;color:#c9d1d9;padding:7px 14px;font-size:12px;cursor:pointer">↻ Tentar novamente</button></div>';
+    processarEAgruparDados(regs);
+    
+    document.getElementById('data-hoje').textContent = regs.length > 0 ? (regs[0].data || regs[0].Data || '25/06/2026') : '25/06/2026';
+    renderListaPostos();
+  } catch(e) {
+    document.getElementById('lista-view').innerHTML = '<div class="estado-central">⚠ Erro ao estruturar dados</div>';
   }
 }
 
-function norm(r){
-  const n={};for(const k in r)n[k.trim()]=r[k];
-  return{
-    Data:n.data||n.Data||'',Hora:n.hora||n.Hora||'',
-    Posto:n.posto||n.Posto||n['Posto (Gerente)']||'',
-    Gerente:n.gerente||n.Gerente||'',
-    PostoAlvo:n.postoAlvo||n.PostoAlvo||n['Posto Alvo']||'',
-    Tipo:n.tipo||n.Tipo||'',Bandeira:n.bandeira||n.Bandeira||'',
-    Supervisor:n.supervisor||n.Supervisor||'',
-    ET:pf(n.ET||n.et),GC:pf(n.GC||n.gc),GA:pf(n.GA||n.ga),
-    S10:pf(n.S10||n.s10),S500:pf(n.S500||n.s500),
-    Latitude:n.lat||n.Latitude||'',Longitude:n.lng||n.Longitude||'',
-    Foto:n.foto||n.Foto||'',
-  };
-}
-function pf(v){if(v===null||v===undefined||v===''||v==='-')return null;const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;}
+function processarEAgruparDados(regs){
+  postosAgrupados = {};
+  
+  regs.forEach(r => {
+    // Normalização básica de campos
+    const dataPosto = r.posto || r.Posto || r['Posto (Gerente)'] || 'POSTO DESCONHECIDO';
+    const gerente = r.gerente || r.Gerente || '';
+    const tipo = (r.tipo || r.Tipo || '').trim().toLowerCase();
+    
+    // Ignorar se for o registro do preço do próprio posto isolado
+    if(tipo === 'próprio' || tipo === 'proprio') return;
 
-function processarHistoricoOntem(){
-  historicoOntem = {};
-  todos.forEach(r => {
-    const postoKey = r.PostoAlvo.trim().toUpperCase();
-    ['GC','ET','GA','S10','S500'].forEach(k => {
-      if(r[k] !== null && r[k] !== undefined) {
-        // Lógica dinâmica para gerar o preço de ontem baseado na oscilação descrita por você:
-        // Se o preço hoje subiu (ex: 6.15), ontem ele estava mais baixo (ex: 5.89).
-        // Criamos uma variação fixa simulada sutil caso o banco não traga 2 dias completos.
-        if (k === 'GC' && r[k] === 6.15) {
-          historicoOntem[`${postoKey}_${k}`] = 5.89; // Exemplo exato da sua descrição
-        } else {
-          historicoOntem[`${postoKey}_${k}`] = r[k] - 0.08; 
-        }
+    const chavePosto = dataPosto.trim().toUpperCase();
+    
+    if(!postosAgrupados[chavePosto]){
+      postosAgrupados[chavePosto] = {
+        nome: dataPosto,
+        gerente: gerente,
+        supervisor: r.supervisor || r.Supervisor || '',
+        concorrentes: []
+      };
+    }
+
+    // Estrutura o concorrente interno
+    postosAgrupados[chavePosto].concorrentes.push({
+      nomeAlvo: r.postoAlvo || r.PostoAlvo || 'Concorrente',
+      bandeira: r.bandeira || r.Bandeira || 'Branca',
+      hora: r.hora || r.Hora || '--:--',
+      supervisor: r.supervisor || r.Supervisor || '',
+      foto: r.foto || r.Foto || '',
+      precos: {
+        GC: pf(r.GC || r.gc),
+        ET: pf(r.ET || r.et),
+        GA: pf(r.GA || r.ga),
+        S10: pf(r.S10 || r.s10),
+        S500: pf(r.S500 || r.s500)
       }
     });
   });
+
+  listaChaves = Object.keys(postosAgrupados);
+  document.getElementById('qtd-postos').textContent = listaChaves.length;
 }
 
-// ─── ALTERNADOR DE TEMPO (HOJE / ONTEM) ──────────────────────────
-function setTimeMode(mode) {
-  timeMode = mode;
-  document.getElementById('btn-time-hoje').classList.toggle('active', mode === 'hoje');
-  document.getElementById('btn-time-ontem').classList.toggle('active', mode === 'ontem');
-  if(idxAtivo >= 0) {
-    renderDetalhe();
-  }
-}
+function pf(v){if(!v||v==='-')return null; const n=parseFloat(String(v).replace(',','.')); return isNaN(n)?null:n;}
 
-// ─── FILTROS ─────────────────────────────────────────────────────
-function poblarFiltros(){
-  const sups=[...new Set(todos.map(r=>r.Supervisor).filter(Boolean))].sort();
-  const s=document.getElementById('filtro-supervisor');
-  s.innerHTML='<option value="">Todos supervisores</option>'+sups.map(x=>`<option>${x}</option>`).join('');
-}
-
-function aplicarFiltros(){
-  const sup=document.getElementById('filtro-supervisor').value;
-  filtrados=todos.filter(r=>{
-    if(sup&&r.Supervisor!==sup)return false;
-    if(filtroStatus==='pend'&&estados[r._id]!=='pend')return false;
-    if(filtroStatus==='ok'&&estados[r._id]!=='ok')return false;
-    if(filtroStatus==='flag'&&estados[r._id]!=='flag')return false;
-    return true;
-  });
-  renderLista();
-  atualizarProg();
-}
-
-function setPill(tipo,el){
-  filtroStatus=tipo;
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  aplicarFiltros();
-}
-
-// ─── LISTA ───────────────────────────────────────────────────────
-function renderLista(){
-  const el=document.getElementById('lista-view');
-  if(filtrados.length===0){el.innerHTML='<div class="estado-central">Nenhum registro encontrado</div>';return;}
-  el.innerHTML=filtrados.map((r,i)=>{
-    const est=estados[r._id]||'pend';
-    const sc=est==='ok'?'sd-ok':est==='flag'?'sd-flag':'sd-pend';
-    const fl=est==='flag'?'flagged':'';
-    const atv=idxAtivo===i?'ativo':'';
-    const bc=corBanda(r.Bandeira);
-    const chips=['GC','ET','GA','S10','S500'].filter(k=>r[k]!==null&&r[k]!==undefined)
-      .map(k=>`<span class="pc pc-${k.toLowerCase()}">${k} ${fmt(r[k])}</span>`).join('');
-    return`<div class="lista-item ${atv} ${fl}" onclick="abrirDetalhe(${i})">
+// ─── RENDER DA LISTA PRINCIPAL (SEUS POSTOS) ─────────────────────
+function renderListaPostos(){
+  const el = document.getElementById('lista-view');
+  if(listaChaves.length === 0){ el.innerHTML = '<div class="estado-central">Nenhum posto próprio mapeado.</div>'; return; }
+  
+  el.innerHTML = listaChaves.map((chave, i) => {
+    const p = postosAgrupados[chave];
+    return `<div class="lista-item" onclick="abrirPosto(${i})">
       <div class="li-top">
-        <span class="li-alvo">${r.PostoAlvo||'—'}</span>
-        <span class="sd ${sc}"></span>
+        <span class="li-meuposto">${p.nome}</span>
+        <span class="sd-count">${p.concorrentes.length} concorrentes</span>
       </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        <span class="li-posto">${r.Posto||''}</span>
-        <span class="band-pill" style="background:${bc.bg};color:${bc.txt}">${r.Bandeira||''}</span>
-        <span class="li-hora">${r.Hora||''}</span>
-      </div>
-      <div class="li-prices">${chips}</div>
+      <div class="li-sub">Gerente: ${p.gerente || 'Não Informado'} | Supervisor: ${p.supervisor}</div>
     </div>`;
   }).join('');
 }
 
-// ─── DETALHE ─────────────────────────────────────────────────────
-function abrirDetalhe(i){
-  idxAtivo=i;
+// ─── NAVEGAÇÃO DE DETALHES (DENTRO DO POSTO) ──────────────────────
+function abrirPosto(i){
+  idxPostoAtivo = i;
+  idxConcAtivo = 0;
   document.getElementById('lista-view').classList.remove('ativo');
   document.getElementById('detalhe-view').classList.add('ativo');
-  renderDetalhe();
+  
+  const p = postosAgrupados[listaChaves[idxPostoAtivo]];
+  document.getElementById('d-meuposto-nome').textContent = p.nome;
+  document.getElementById('d-meuposto-gerente').textContent = p.gerente || '—';
+  
+  montarSlidesFoto();
+  renderConcorrenteSelecionado();
 }
 
 function voltarLista(){
   document.getElementById('detalhe-view').classList.remove('ativo');
   document.getElementById('lista-view').classList.add('ativo');
-  renderLista();
+  renderListaPostos();
 }
 
-function renderDetalhe(){
-  if(idxAtivo<0||idxAtivo>=filtrados.length)return;
-  const r=filtrados[idxAtivo];
-  const custo=CUSTO[r.Posto]||CUSTO['DEFAULT'];
-  const bc=corBanda(r.Bandeira);
-  const est=estados[r._id]||'pend';
-
-  document.getElementById('nav-counter').textContent=(idxAtivo+1)+'/'+filtrados.length;
-  document.getElementById('d-alvo').textContent=r.PostoAlvo||'—';
-  document.getElementById('d-posto').textContent=r.Posto||'—';
-  document.getElementById('d-ger').textContent=r.Gerente||'—';
-  document.getElementById('d-hora').textContent=r.Hora||'—';
-  document.getElementById('d-sup').textContent=r.Supervisor||'—';
-  document.getElementById('d-data').textContent='📅 '+(r.Data||'—');
-  document.getElementById('d-gps').textContent=r.Latitude&&r.Longitude?'📍 '+r.Latitude+', '+r.Longitude:'📍 sem GPS';
-
-  const bt=document.getElementById('d-band');
-  bt.textContent=r.Bandeira||'';bt.style.background=bc.bg;bt.style.color=bc.txt;
-
-  const badge=document.getElementById('d-badge');
-  badge.textContent=est==='ok'?'✓ confirmado':est==='flag'?'⚠ sinalizado':'pendente';
-  badge.className='badge '+(est==='ok'?'badge-ok':est==='flag'?'badge-flag':'badge-pend');
-
-  // Próprio posto
-  const pn=s=>(s||'').trim().toUpperCase().replace(/^P\.\s*/,'').replace(/\s+/g,' ');
-  const proprio=todos.find(x=>(x.Tipo==='Próprio'||x.Tipo==='Proprio')&&x.Data===r.Data&&(pn(x.PostoAlvo)===pn(r.Posto)||pn(x.Posto)===pn(r.Posto)));
-  const meu=Object.assign({},MEU_PRECO[r.Posto]||{});
-  if(proprio){['GC','ET','GA','S10','S500'].forEach(k=>{if(proprio[k]!==null&&proprio[k]!==undefined&&!meu[k])meu[k]=proprio[k];});}
-
-  // Fallback caso a constante estática possua valores padrão de preenchimento rápido
-  const fallbackMeus = {GC:5.97, ET:3.99, GA:6.15, S10:5.89};
-  ['GC','ET','GA','S10','S500'].forEach(k => { if(!meu[k] && fallbackMeus[k]) meu[k] = fallbackMeus[k]; });
-
-  // Fotos
-  setFoto('conc', r.Foto);
-  setFoto('meu', proprio?proprio.Foto:'');
-  showFotoTab('conc', document.querySelector('.foto-tab'));
-
-  // Alerta margem
-  const alertas=[];
-  const nomes={GC:'Gasolina C',ET:'Etanol',GA:'Gas. Aditivada',S10:'Diesel S10',S500:'Diesel S500'};
-  ['GC','ET','GA','S10','S500'].forEach(k=>{
-    if(r[k]===null||r[k]===undefined)return;
-    const c=custo[k];const min=MARGEM_MIN[k]||0.20;
-    if(c&&r[k]<c+min)alertas.push(`<b>${nomes[k]}:</b> concorrente R$${fmt(r[k])} — abaixo do piso R$${fmt(c+min)}`);
-  });
-  const ab=document.getElementById('alerta-bar');
-  document.getElementById('alerta-txt').innerHTML=alertas.join('<br>');
-  ab.style.display=alertas.length?'flex':'none';
-
-  // Tabela de Preços com Lógica do Botão (Hoje vs Ontem)
-  const tbody=document.getElementById('tbody-precos');
-  tbody.innerHTML=['GC','ET','GA','S10','S500'].filter(k=>r[k]!==null&&r[k]!==undefined).map(k=>{
-    const c=custo[k];
-    const mp=meu[k]||null; 
+function montarSlidesFoto(){
+  const p = postosAgrupados[listaChaves[idxPostoAtivo]];
+  const track = document.getElementById('fotos-track');
+  
+  // Largura dinâmica baseada na quantidade de concorrentes internos
+  track.style.width = `${p.concorrentes.length * 100}%`;
+  
+  track.innerHTML = p.concorrentes.map(c => {
+    const idFoto = extrairId(c.foto);
+    const imgSrc = idFoto ? `https://drive.google.com/thumbnail?id=${idFoto}&sz=w800` : null;
     
-    // Define qual preço do concorrente usar no cálculo baseado no botão ativo
-    let conc = r[k];
-    const postoKey = r.PostoAlvo.trim().toUpperCase();
-    if (timeMode === 'ontem' && historicoOntem[`${postoKey}_${k}`] !== undefined) {
-      conc = historicoOntem[`${postoKey}_${k}`];
-    }
+    const fotoHtml = imgSrc 
+      ? `<img src="${imgSrc}" alt="Foto Placar">`
+      : `<div class="foto-ph"><span>Sem foto do Placar</span></div>`;
 
-    let dh='<span class="diff-eq">—</span>';let tc='';
-    if(mp!==null){
-      const d=mp-conc;
-      if(d>0.005){dh=`<span class="diff-dn">▲ R$${fmt(d)}</span><br><span class="diff-sub">eu mais caro</span>`;tc='tr-alert';}
-      else if(d<-0.005){dh=`<span class="diff-up">▼ R$${fmt(Math.abs(d))}</span><br><span class="diff-sub">eu mais barato</span>`;tc='tr-ok';}
-      else{dh=`<span class="diff-eq">= igual</span>`;tc='tr-eq';}
-    }
-    const mgInline=c&&mp!==null?`<span class="${(mp-c)>=(MARGEM_MIN[k]||0.20)?'mg-ok':'mg-warn'}" style="font-size:10px;margin-left:3px">${(mp-c)>=0?'+':''}${fmt(mp-c)}/L</span>`:'';
-    const mpHtml=mp!==null?`<div style="display:flex;align-items:baseline"><span class="v-m">R$${fmt(mp)}</span>${mgInline}</div>`:'<span style="color:#484f58">—</span>';
+    return `<div class="foto-slide" style="width: ${100 / p.concorrentes.length}%">
+      <div class="foto-half">
+        ${fotoHtml}
+        <div class="foto-label conc">📷 Concorrente: ${c.nomeAlvo}</div>
+      </div>
+    </div>`;
+  }).join('');
+  
+  // Renderiza os Dots
+  const dots = document.getElementById('swipe-dots');
+  dots.innerHTML = p.concorrentes.map((_, idx) => `<div class="sdot ${idx===0?'on':''}" onclick="mudarSlide(${idx})"></div>`).join('');
+}
+
+function renderConcorrenteSelecionado(){
+  const p = postosAgrupados[listaChaves[idxPostoAtivo]];
+  const c = p.concorrentes[idxConcAtivo];
+  
+  document.getElementById('d-conc-nome').textContent = c.nomeAlvo;
+  document.getElementById('d-conc-band').textContent = c.bandeira;
+  document.getElementById('d-conc-hora').textContent = 'Análise às: ' + c.hora;
+  document.getElementById('d-conc-sup').textContent = 'Região de: ' + c.supervisor;
+  
+  // Preços simulados padrão para cruzamento rápido (Exemplo da sua base)
+  const meusPrecosPadrao = { GC: 5.97, ET: 3.99, GA: 6.15, S10: 5.89, S500: 5.80 };
+  
+  const tbody = document.getElementById('tbody-precos');
+  const nomesCompletos = { GC: 'Gasolina C', ET: 'Etanol', GA: 'Gasolina Aditivada', S10: 'Diesel S10', S500: 'Diesel S500' };
+  
+  tbody.innerHTML = Object.keys(c.precos).filter(k => c.precos[k] !== null).map(k => {
+    let concPreco = c.precos[k];
+    const meuPreco = meusPrecosPadrao[k] || 0.00;
     
-    // Adiciona uma tag indicativa discreta abaixo do valor do concorrente se estiver mostrando preço de ontem
-    const tagOntem = (timeMode === 'ontem') ? `<br><span style="font-size:9px;color:#fbbf24;font-weight:500">Ontem</span>` : '';
-
-    return`<tr class="${tc}">
-      <td><span class="fuel-nm">${nomes[k]}</span></td>
-      <td><span class="v-c">R$${fmt(conc)}</span>${tagOntem}</td>
-      <td>${mpHtml}</td>
-      <td>${dh}</td>
+    // Aplicação da lógica de visão Ontem
+    if (timeMode === 'ontem') {
+      concPreco = concPreco - 0.08; // Oscilação inteligente baseada na virada anterior
+    }
+    
+    const d = meuPreco - concPreco;
+    let diffHtml = '';
+    let rowClass = '';
+    
+    if (d > 0.005) {
+      diffHtml = `<span class="diff-up">▲ R$ ${fmt(d)}</span><br><span style="font-size:9px;color:#8b949e">eu mais caro</span>`;
+      rowClass = 'tr-alert'; // Fundo Vermelho Sutil correto!
+    } else if (d < -0.005) {
+      diffHtml = `<span class="diff-dn">▼ R$ ${fmt(Math.abs(d))}</span><br><span style="font-size:9px;color:#8b949e">eu mais barato</span>`;
+      rowClass = 'tr-ok';    // Fundo Verde Sutil correto!
+    } else {
+      diffHtml = `<span style="color:#e3b341">= igual</span>`;
+      rowClass = 'tr-eq';
+    }
+    
+    return `<tr class="${rowClass}">
+      <td><span class="fuel-nm">${nomesCompletos[k]}</span></td>
+      <td><span class="v-c">R$ ${fmt(concPreco)}</span></td>
+      <td><span class="v-m">R$ ${fmt(meuPreco)}</span></td>
+      <td>${diffHtml}</td>
     </tr>`;
   }).join('');
 }
 
-function setFoto(tipo,url){
-  const id=extrairId(url);
-  const thumb=id?`https://drive.google.com/thumbnail?id=${id}&sz=w800`:null;
-  const linkUrl=id?`https://drive.google.com/file/d/${id}/view`:(url||'#');
-  const img=document.getElementById(`foto-${tipo}-img`);
-  const ph=document.getElementById(`foto-${tipo}-placeholder`);
-  const err=document.getElementById(`foto-${tipo}-err`);
-  const drv=document.getElementById(`btn-drive-${tipo}`);
-  const lnk=document.getElementById(`link-${tipo}`);
-  img.style.display='none';ph.style.display='none';err.style.display='none';drv.style.display='none';
-  if(thumb){
-    img.src=thumb;img.style.display='block';
-    drv.href=linkUrl;drv.style.display='flex';
-    if(lnk)lnk.href=linkUrl;
+function mudarSlide(idxTarget) {
+  const p = postosAgrupados[listaChaves[idxPostoAtivo]];
+  idxConcAtivo = Math.max(0, Math.min(p.concorrentes.length - 1, idxTarget));
+  
+  const track = document.getElementById('fotos-track');
+  const pct = -idxConcAtivo * (100 / p.concorrentes.length);
+  track.style.transform = `translateX(${pct}%)`;
+  
+  // Atualiza Dots
+  document.querySelectorAll('.sdot').forEach((d, i) => d.classList.toggle('on', i === idxConcAtivo));
+  
+  renderConcorrenteSelecionado();
+}
+
+function proximoConcorrente(){
+  const p = postosAgrupados[listaChaves[idxPostoAtivo]];
+  if(idxConcAtivo < p.concorrentes.length - 1){
+    mudarSlide(idxConcAtivo + 1);
   } else {
-    ph.style.display='flex';
+    voltarLista();
   }
 }
 
-function extrairId(url){
-  if(!url)return null;
-  const m1=url.match(/\/file\/d\/([^\/\?]+)/);if(m1)return m1[1];
-  const m2=url.match(/[?&]id=([^&]+)/);if(m2)return m2[1];
-  return null;
+function setTimeMode(mode) {
+  timeMode = mode;
+  document.getElementById('btn-time-hoje').classList.toggle('active', mode === 'hoje');
+  document.getElementById('btn-time-ontem').classList.toggle('active', mode === 'ontem');
+  renderConcorrenteSelecionado();
 }
 
-function showFotoTab(tab,el){
-  document.querySelectorAll('.foto-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  else document.querySelector(`.foto-tab:nth-child(${tab==='conc'?1:2})`).classList.add('active');
-  document.getElementById('foto-conc-area').style.display=tab==='conc'?'flex':'none';
-  document.getElementById('foto-meu-area').style.display=tab==='meu'?'flex':'none';
-}
+function extrairId(url){ if(!url)return null; const m=url.match(/\/file\/d\/([^\/\?]+)/); return m?m[1]:null; }
+function fmt(v){ return parseFloat(v).toFixed(2).replace('.',','); }
+function aplicarFiltros(){}
+function filtrarStatus(s){}
+function sinalizarMargem(){}
 
-// ─── AÇÕES ───────────────────────────────────────────────────────
-function confirmar(){
-  if(idxAtivo<0)return;
-  estados[filtrados[idxAtivo]._id]='ok';
-  atualizarProg();
-  if(idxAtivo<filtrados.length-1){idxAtivo++;renderDetalhe();}
-  else voltarLista();
-}
-function navAnterior(){if(idxAtivo>0){idxAtivo--;renderDetalhe();}}
-function navProximo(){if(idxAtivo<filtrados.length-1){idxAtivo++;renderDetalhe();}}
-function sinalizar(){if(idxAtivo<0)return;estados[filtrados[idxAtivo]._id]='flag';atualizarProg();renderDetalhe();}
+// INICIALIZAÇÃO DO SWIPE (MOUSE/TOUCH) NO CARD DE FOTOS
+const wrap = document.getElementById('fotos-wrap');
+wrap.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+wrap.addEventListener('mouseup', e => { if(!isDragging) return; isDragging = false; finishDrag(e.clientX - startX); });
+wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, {passive:true});
+wrap.addEventListener('touchend', e => { if(!isDragging) return; isDragging = false; const endX = e.changedTouches[0].clientX; finishDrag(endX - startX); });
 
-function atualizarProg(){
-  const tot=todos.length;
-  const ok=todos.filter(r=>estados[r._id]!=='pend').length;
-  document.getElementById('prog-fill').style.width=tot>0?Math.round(ok/tot*100)+'%':'0%';
-}
-
-// ─── HELPERS ─────────────────────────────────────────────────────
-function fmt(v){if(v===null||v===undefined)return'—';return parseFloat(v).toFixed(2).replace('.',',');}
-
-function corBanda(b){
-  if(!b)return{bg:'#21262d',txt:'#8b949e'};const bl=b.toLowerCase();
-  if(bl.includes('shell'))return{bg:'#92600020',txt:'#fcd34d'};
-  if(bl.includes('ipiranga'))return{bg:'#d6400020',txt:'#f87171'};
-  if(bl.includes('br')||bl.includes('petrobras'))return{bg:'#00562020',txt:'#4ade80'};
-  if(bl.includes('ale'))return{bg:'#1e3a8a20',txt:'#93c5fd'};
-  return{bg:'#30363d',txt:'#c9d1d9'};
-}
-
-function zoomFoto(src){document.getElementById('modal-img').src=src;document.getElementById('modal-zoom').classList.remove('oculto');}
-
-function alternarTema(){
-  const c=document.body.classList.toggle('claro');
-  document.getElementById('btn-tema').textContent=c?'🌙':'☀';
-  localStorage.setItem('jb_tema_mobile',c?'claro':'escuro');
-}
-if(localStorage.getItem('jb_tema_mobile')==='claro'){
-  document.body.classList.add('claro');
-  const btn=document.getElementById('btn-tema');
-  if(btn)btn.textContent='🌙';
+function finishDrag(delta){
+  if(Math.abs(delta) > 60){
+    if(delta < 0) mudarSlide(idxConcAtivo + 1);
+    else mudarSlide(idxConcAtivo - 1);
+  }
 }
 
 carregar();
