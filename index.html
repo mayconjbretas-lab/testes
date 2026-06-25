@@ -2,551 +2,362 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JBRETAS — Revisor de Coletas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JBRETAS — Coletas</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; min-height: 100vh; transition: background .2s, color .2s; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:#0d1117;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;display:flex;flex-direction:column}
 
-  /* ── TEMA CLARO ───────────────────────────────────────────────── */
-  body.claro { background: #f0f2f5; color: #1a1f2e; }
-  body.claro .topbar      { background: #ffffff; border-bottom-color: #dde1e9; }
-  body.claro .tb-brand    { color: #008c62; border-right-color: #dde1e9; }
-  body.claro .tb-sub      { color: #6b7385; }
-  body.claro .chip        { background: #eaecf0; color: #4a5168; }
-  body.claro .chip b      { color: #1a1f2e; }
-  body.claro .btn-reload  { background: #eaecf0; border-color: #cdd1da; color: #1a1f2e; }
-  body.claro .btn-reload:hover { background: #dde1e9; }
-  body.claro .prog-bar-wrap { background: #dde1e9; }
-  body.claro .filtros     { background: #ffffff; border-bottom-color: #dde1e9; }
-  body.claro .filtros select, body.claro .filtros input[type=date] { background: #f0f2f5; border-color: #cdd1da; color: #1a1f2e; }
-  body.claro .filtros label { color: #6b7385; }
-  body.claro .pill-filter { background: #eaecf0; border-color: #cdd1da; color: #6b7385; }
-  body.claro .pill-filter.active { background: #d0f5e8; border-color: #00c48a; color: #007a55; }
-  body.claro .pill-filter.alert-pill.active { background: #fde8e8; border-color: #f5a0a0; color: #c0392b; }
-  body.claro .lista       { background: #ffffff; border-right-color: #dde1e9; }
-  body.claro .lista-item  { border-bottom-color: #eaecf0; }
-  body.claro .lista-item:hover { background: #f5f7fa; }
-  body.claro .lista-item.ativo { background: #e6f9f2; border-left-color: #00c48a; }
-  body.claro .lista-item.flagged { background: #fdf0f0; border-left-color: #e74c3c; }
-  body.claro .li-alvo     { color: #1a1f2e; }
-  body.claro .li-posto    { color: #008c62; }
-  body.claro .li-hora     { color: #aab0bd; }
-  body.claro .painel      { background: #f0f2f5; }
-  body.claro .card-header { background: #ffffff; border-bottom-color: #dde1e9; }
-  body.claro .card-title  { color: #1a1f2e; }
-  body.claro .card-sub    { color: #6b7385; }
-  body.claro .meta-chip   { background: #eaecf0; color: #6b7385; }
-  body.claro .meta-chip b { color: #1a1f2e; }
-  body.claro .foto-col    { background: #ffffff; }
-  body.claro .foto-label  { color: #4a5168; border-bottom-color: #dde1e9; background: #ffffff; }
-  body.claro .precos-label { background: #ffffff; color: #1a1f2e; border-bottom-color: #dde1e9; }
-  body.claro .comp-table th { color: #1a1f2e; border-bottom-color: #cdd1da; }
-  body.claro .fuel-nm { color: #1a1f2e; }
-  body.claro .foto-wrap   { background: #eaecf0; }
-  body.claro .foto-footer { background: #f0f2f5; border-top-color: #dde1e9; }
-  body.claro .foto-meta   { color: #6b7385; }
-  body.claro .btn-drive   { background: #eaecf0; border-color: #cdd1da; color: #1a1f2e; }
-  body.claro .precos-col  { background: #f5f7fa; }
-  body.claro .comp-table td { border-bottom-color: #eaecf0; }
-  body.claro .tr-alert td { background: #fdf5f5; }
-  body.claro .tr-ok td    { background: #f0faf5; }
-  body.claro .tr-eq td    { background: #fffbf0; }
-  body.claro .v-conc, body.claro .v-meu { color: #1a1f2e; }
-  body.claro .custo-txt   { color: #6b7385; }
-  body.claro .custo-bloco { background: #ffffff; border-color: #dde1e9; }
-  body.claro .custo-row   { border-bottom-color: #eaecf0; }
-  body.claro .custo-nm    { color: #6b7385; }
-  body.claro .alerta-margem { background: #fff3f0; border-color: #f5a090; }
-  body.claro .alerta-margem-txt { color: #8b2500; }
-  body.claro .acoes       { background: #ffffff; border-top-color: #dde1e9; }
-  body.claro .btn-prev    { background: #eaecf0; color: #1a1f2e; }
-  body.claro .btn-flag    { background: #fde8e8; color: #c0392b; border-color: #f5a0a0; }
-  body.claro .estado-central { color: #aab0bd; }
-  body.claro .spinner     { border-color: #dde1e9; border-top-color: #00c48a; }
-  body.claro .badge-pend  { background: #eaecf0; color: #6b7385; }
-  body.claro .dropdown-lista { background: #ffffff; border-color: #cdd1da; }
-  body.claro .dd-item     { color: #1a1f2e; border-bottom-color: #eaecf0; }
-  body.claro .dd-item:hover { background: #e6f9f2; color: #007a55; }
-  body.claro .dd-search input { background: #f0f2f5; border-color: #cdd1da; color: #1a1f2e; }
-  body.claro .foto-placeholder { color: #aab0bd; }
-  body.claro .pc-gc   { background: #d4f5e2; color: #1a6640; }
-  body.claro .pc-et   { background: #ede8fd; color: #4a2d99; }
-  body.claro .pc-ga   { background: #ddeeff; color: #1a4080; }
-  body.claro .pc-s10  { background: #fef3d0; color: #7a5200; }
-  body.claro .pc-s500 { background: #fde8d8; color: #7a3000; }
-  /* botão tema */
-  .btn-tema { background: #21262d; border: 1px solid #30363d; border-radius: 6px; padding: 5px 11px; font-size: 13px; color: #c9d1d9; cursor: pointer; line-height: 1; }
-  .btn-tema:hover { background: #30363d; }
-  body.claro .btn-tema { background: #eaecf0; border-color: #cdd1da; color: #1a1f2e; }
-  body.claro .btn-tema:hover { background: #dde1e9; }
+/* TOPBAR */
+.topbar{background:#161b22;border-bottom:1px solid #21262d;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.brand{color:#00e5a0;font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px}
+.tright{display:flex;align-items:center;gap:8px}
+.ldot{width:6px;height:6px;border-radius:50%;background:#00e5a0;animation:pulse 1.4s infinite;display:inline-block;margin-right:4px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.chip-sm{background:#21262d;border-radius:5px;padding:3px 8px;font-size:11px;color:#8b949e}
+.chip-sm b{color:#e6edf3}
+.btn-icon{background:#21262d;border:1px solid #30363d;border-radius:6px;padding:5px 9px;font-size:13px;color:#c9d1d9;cursor:pointer;border:none}
 
-  /* TOPBAR */
-  .topbar { background: #161b22; border-bottom: 1px solid #21262d; padding: 0 20px; display: flex; align-items: stretch; height: 48px; }
-  .tb-brand { color: #00e5a0; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; padding-right: 16px; border-right: 1px solid #21262d; margin-right: 12px; }
-  .tb-sub { color: #8b949e; font-size: 12px; display: flex; align-items: center; }
-  .tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #00e5a0; animation: pulse 1.4s ease-in-out infinite; display: inline-block; margin-right: 5px; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-  .chip { background: #21262d; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #8b949e; }
-  .chip b { color: #e6edf3; }
-  .btn-reload { background: #21262d; border: 1px solid #30363d; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #c9d1d9; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-  .btn-reload:hover { background: #30363d; }
+/* PROGRESSO */
+.prog{height:2px;background:#21262d;flex-shrink:0}
+.prog-fill{height:100%;background:#00e5a0;transition:width .3s}
 
-  /* PROGRESSO */
-  .prog-bar-wrap { height: 3px; background: #21262d; }
-  .prog-bar-fill { height: 100%; background: #00e5a0; transition: width .3s; }
+/* FILTROS */
+.filtros{background:#161b22;border-bottom:1px solid #21262d;padding:6px 12px;display:flex;align-items:center;gap:6px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.pill{background:#21262d;border:1px solid #30363d;border-radius:20px;padding:4px 12px;font-size:11px;color:#8b949e;white-space:nowrap;cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px}
+.pill.active{background:#00e5a015;border-color:#00e5a050;color:#00e5a0}
+.pill.danger.active{background:#f8514915;border-color:#f8514950;color:#f85149}
+.filtros-select{background:#21262d;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;font-size:11px;padding:4px 6px;cursor:pointer}
 
-  /* FILTROS */
-  .filtros { background: #161b22; border-bottom: 1px solid #21262d; padding: 8px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .filtros select, .filtros input[type=date] { background: #21262d; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 11px; padding: 4px 8px; cursor: pointer; }
-  .filtros label { font-size: 11px; color: #8b949e; }
-  .pill-filter { background: #21262d; border: 1px solid #30363d; border-radius: 20px; padding: 3px 12px; font-size: 11px; color: #8b949e; cursor: pointer; user-select: none; }
-  .pill-filter.active { background: #00e5a015; border-color: #00e5a050; color: #00e5a0; }
-  .pill-filter.alert-pill.active { background: #f8514915; border-color: #f8514950; color: #f85149; }
-  .count { margin-left: auto; font-size: 11px; color: #8b949e; }
-  .count b { color: #e6edf3; }
+/* LISTA (view de listagem) */
+.lista-view{flex:1;overflow-y:auto;display:none;flex-direction:column}
+.lista-view.ativo{display:flex}
+.lista-item{padding:10px 14px;border-bottom:1px solid #161b22;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:background .1s}
+.lista-item:active{background:#161b22}
+.lista-item.ativo{background:#0d2a1e;border-left:3px solid #00e5a0}
+.lista-item.flagged{background:#1a0f0f;border-left:3px solid #f85149}
+.li-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.li-alvo{font-size:13px;font-weight:600;color:#e6edf3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-posto{font-size:10px;color:#00e5a0}
+.li-hora{font-size:10px;color:#484f58}
+.li-prices{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.pc{border-radius:4px;padding:1px 6px;font-size:10px;font-weight:600}
+.pc-gc{background:#0f2a0f;color:#4ade80}
+.pc-et{background:#1a0f2a;color:#c084fc}
+.pc-ga{background:#0f1a2a;color:#60a5fa}
+.pc-s10{background:#2a1f0a;color:#fbbf24}
+.pc-s500{background:#2a150a;color:#fb923c}
+.band-pill{border-radius:3px;padding:1px 5px;font-size:9px;font-weight:600}
+.sd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sd-pend{background:#484f58}
+.sd-ok{background:#00e5a0}
+.sd-flag{background:#f85149}
 
-  /* LAYOUT PRINCIPAL */
-  .main { display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 95px); }
+/* DETALHE (view de revisão) */
+.detalhe-view{flex:1;overflow:hidden;display:none;flex-direction:column}
+.detalhe-view.ativo{display:flex}
 
-  /* LISTA LATERAL */
-  .lista { border-right: 1px solid #21262d; overflow-y: auto; background: #0d1117; }
-  .lista-item { padding: 10px 14px; border-bottom: 1px solid #161b22; cursor: pointer; transition: background .12s; display: flex; flex-direction: column; gap: 4px; }
-  .lista-item:hover { background: #161b22; }
-  .lista-item.ativo { background: #0d2a1e; border-left: 2px solid #00e5a0; }
-  .lista-item.flagged { border-left: 2px solid #f85149; background: #1a0f0f; }
-  .li-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-  .li-alvo { font-size: 12px; font-weight: 600; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .li-posto { font-size: 10px; color: #00e5a0; }
-  .li-hora { font-size: 10px; color: #484f58; }
-  .li-prices { display: flex; gap: 4px; flex-wrap: wrap; }
-  .pc { border-radius: 4px; padding: 1px 6px; font-size: 10px; font-weight: 600; }
-  .pc-gc { background: #0f2a0f; color: #4ade80; }
-  .pc-et { background: #1a0f2a; color: #c084fc; }
-  .pc-ga { background: #0f1a2a; color: #60a5fa; }
-  .pc-s10 { background: #2a1f0a; color: #fbbf24; }
-  .pc-s500 { background: #2a150a; color: #fb923c; }
-  .band-pill { border-radius: 3px; padding: 1px 5px; font-size: 9px; font-weight: 600; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .sd-pend { background: #484f58; }
-  .sd-ok { background: #00e5a0; }
-  .sd-flag { background: #f85149; }
+.card-header{background:#161b22;border-bottom:1px solid #21262d;padding:10px 14px;flex-shrink:0}
+.card-nav{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.btn-voltar{background:#21262d;border:none;border-radius:6px;padding:5px 10px;font-size:11px;color:#c9d1d9;cursor:pointer;display:flex;align-items:center;gap:4px}
+.card-title{font-size:16px;font-weight:600;color:#e6edf3;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.band-tag{border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600}
+.badge{border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600}
+.badge-pend{background:#21262d;color:#8b949e}
+.badge-ok{background:#00e5a015;color:#00e5a0;border:1px solid #00e5a030}
+.badge-flag{background:#f8514915;color:#f85149;border:1px solid #f8514940}
+.card-sub{font-size:11px;color:#8b949e;margin-top:3px}
+.card-sub span{color:#00e5a0;font-weight:600}
+.meta-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.mc{background:#21262d;border-radius:5px;padding:3px 8px;font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
+.mc b{color:#c9d1d9}
 
-  /* PAINEL DIREITO */
-  .painel { display: flex; flex-direction: column; overflow: hidden; }
+/* FOTOS */
+.foto-section{flex-shrink:0;background:#0b0f16;border-bottom:1px solid #21262d}
+.foto-tabs{display:flex;border-bottom:1px solid #21262d}
+.foto-tab{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:600;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:4px}
+.foto-tab.active{color:#00e5a0;border-bottom-color:#00e5a0}
+.foto-img-area{height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.foto-img{width:100%;height:100%;object-fit:contain;cursor:zoom-in}
+.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:#484f58;font-size:12px}
+.drive-btn{position:absolute;bottom:8px;right:10px;background:#21262d;border:1px solid #30363d;border-radius:5px;padding:3px 9px;font-size:10px;color:#c9d1d9;text-decoration:none;display:flex;align-items:center;gap:4px}
+.foto-footer{padding:5px 12px;display:flex;gap:10px;background:#0d1117;border-top:1px solid #21262d}
+.fmeta{font-size:10px;color:#8b949e;display:flex;align-items:center;gap:4px}
 
-  /* HEADER DO CARD */
-  .card-header { background: #161b22; border-bottom: 1px solid #21262d; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
-  .card-title { font-size: 18px; font-weight: 600; color: #e6edf3; }
-  .card-sub { font-size: 12px; color: #8b949e; margin-top: 3px; }
-  .meta-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-  .meta-chip { background: #21262d; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 5px; }
-  .meta-chip b { color: #c9d1d9; }
+/* PREÇOS */
+.preco-section{flex:1;overflow-y:auto}
+.alerta-bar{background:#1a080080;border-bottom:1px solid #f8514930;padding:7px 12px;display:flex;align-items:flex-start;gap:6px}
+.alerta-icon{color:#f85149;font-size:14px;flex-shrink:0;margin-top:1px}
+.alerta-txt{font-size:11px;color:#fca5a5;line-height:1.5}
+.alerta-txt b{color:#f87171}
+.preco-table{width:100%;border-collapse:collapse;font-size:12px}
+.preco-table th{font-size:10px;color:#c9d1d9;font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:7px 10px;text-align:left;border-bottom:1px solid #21262d;background:#161b22;position:sticky;top:0;z-index:1}
+.preco-table td{padding:8px 10px;border-bottom:1px solid #0d1117;vertical-align:middle}
+.tr-ok td{background:#0b1810}
+.tr-alert td{background:#1a0f0f}
+.tr-eq td{background:#1a150a}
+.fuel-nm{font-size:12px;color:#e6edf3;font-weight:500}
+.v-c{font-size:13px;font-weight:600;color:#e6edf3}
+.v-m{font-size:13px;font-weight:600;color:#e6edf3}
+.mg-ok{font-size:10px;color:#00e5a0}
+.mg-warn{font-size:10px;color:#f85149;font-weight:600}
+.diff-up{color:#00e5a0;font-weight:600;font-size:12px}
+.diff-dn{color:#f85149;font-weight:600;font-size:12px}
+.diff-eq{color:#e3b341;font-weight:600;font-size:12px}
+.diff-sub{font-size:9px;color:#8b949e}
 
-  /* CORPO DO CARD */
-  .card-body { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+/* AÇÕES */
+.acoes{background:#161b22;border-top:1px solid #21262d;padding:10px 14px;display:flex;gap:8px;flex-shrink:0}
+.btn-ant{background:#21262d;color:#c9d1d9;border:none;border-radius:8px;padding:11px 14px;font-size:12px;font-weight:600;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-flag{background:#1a080080;color:#f85149;border:1px solid #f8514940;border-radius:8px;padding:11px 13px;font-size:14px;cursor:pointer}
+.btn-ok{background:#00e5a0;color:#0d1117;border:none;border-radius:8px;padding:11px 0;font-size:12px;font-weight:600;cursor:pointer;flex:2;display:flex;align-items:center;justify-content:center;gap:5px}
 
-  /* FOTO */
-  .foto-col { border-right: 1px solid #21262d; display: flex; flex-direction: column; overflow: hidden; }
-  .foto-label { padding: 10px 16px; font-size: 10px; font-weight: 600; letter-spacing: .7px; text-transform: uppercase; color: #8b949e; border-bottom: 1px solid #21262d; display: flex; align-items: center; justify-content: space-between; }
-  .foto-wrap { flex: 1; background: #0b0f16; overflow-y: auto; overflow-x: hidden; padding: 8px; display: flex; align-items: flex-start; justify-content: center; }
-  .foto-img { width: 100%; max-width: 100%; height: auto; border-radius: 8px; object-fit: contain; cursor: zoom-in; display: block; }
-  .foto-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #484f58; padding: 24px; }
-  .foto-placeholder svg { width: 48px; height: 48px; opacity: .4; }
-  .foto-footer { padding: 6px 16px; border-top: 1px solid #21262d; display: flex; gap: 12px; align-items: center; background: #0d1117; flex-shrink: 0; }
-  .foto-meta { font-size: 10px; color: #8b949e; display: flex; align-items: center; gap: 4px; }
-  .btn-drive { background: #21262d; border: 1px solid #30363d; border-radius: 6px; padding: 3px 10px; font-size: 11px; color: #c9d1d9; cursor: pointer; text-decoration: none; margin-left: auto; }
-  .btn-drive:hover { background: #30363d; }
+/* MODAL ZOOM */
+.modal-zoom{position:fixed;inset:0;background:#000000dd;z-index:999;display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.modal-zoom.oculto{display:none}
+.modal-zoom img{max-width:95vw;max-height:90vh;border-radius:8px;object-fit:contain}
 
-  /* PREÇOS */
-  .precos-col { display: flex; flex-direction: column; overflow-y: auto; }
-  .precos-label { padding: 10px 16px; font-size: 10px; font-weight: 600; letter-spacing: .7px; text-transform: uppercase; color: #c9d1d9; border-bottom: 1px solid #21262d; position: sticky; top: 0; background: #161b22; z-index: 1; }
-  .precos-body { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+/* LOADING */
+.estado-central{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:#484f58;font-size:13px}
+.spinner{width:32px;height:32px;border:2px solid #21262d;border-top-color:#00e5a0;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  /* SELETOR DE POSTO (clicável no nome) */
-  .posto-selector { position: relative; display: inline-block; }
-  .posto-nome-clicavel { color: #00e5a0; font-weight: 600; font-size: 15px; cursor: pointer; border-bottom: 1px dashed #00e5a050; padding-bottom: 1px; user-select: none; }
-  .posto-nome-clicavel:hover { color: #00ffb3; border-bottom-color: #00e5a0; }
-  .dropdown-lista { position: absolute; top: calc(100% + 6px); left: 0; background: #161b22; border: 1px solid #30363d; border-radius: 8px; min-width: 220px; z-index: 100; box-shadow: 0 8px 24px #00000060; max-height: 280px; overflow-y: auto; }
-  .dropdown-lista.oculto { display: none; }
-  .dd-item { padding: 9px 14px; font-size: 12px; color: #c9d1d9; cursor: pointer; border-bottom: 1px solid #21262d; }
-  .dd-item:last-child { border-bottom: none; }
-  .dd-item:hover { background: #0d2a1e; color: #00e5a0; }
-  .dd-item.selecionado { color: #00e5a0; background: #0d2a1e; font-weight: 600; }
-
-  /* TABELA DE COMPARAÇÃO */
-  .comp-table { width: 100%; border-collapse: collapse; }
-  .comp-table th { font-size: 10px; color: #c9d1d9; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; padding: 6px 8px; text-align: left; border-bottom: 1px solid #30363d; }
-  .comp-table td { padding: 8px 8px; border-bottom: 1px solid #0d1117; vertical-align: middle; }
-  .tr-alert td { background: #1a0f0f; }
-  .tr-ok td { background: #0b1810; }
-  .tr-eq td { background: #1a150a; }
-  .fuel-nm { font-size: 12px; color: #e6edf3; font-weight: 500; }
-  .v-conc { font-size: 14px; font-weight: 600; color: #e6edf3; }
-  .v-meu { font-size: 14px; font-weight: 600; color: #e6edf3; }
-  .diff-up { color: #00e5a0; font-weight: 600; font-size: 13px; }
-  .diff-dn { color: #f85149; font-weight: 600; font-size: 13px; }
-  .diff-eq { color: #e3b341; font-weight: 600; font-size: 13px; }
-  .custo-txt { font-size: 10px; color: #8b949e; }
-  .mg-ok { font-size: 10px; color: #00e5a0; }
-  .mg-warn { font-size: 10px; color: #f85149; font-weight: 600; }
-  .mg-label { font-size: 9px; color: #f85149; margin-top: 2px; }
-
-  /* ALERTA MARGEM */
-  .alerta-margem { background: #1a0800; border: 1px solid #f8514940; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
-  .alerta-margem-icon { font-size: 20px; color: #f85149; flex-shrink: 0; }
-  .alerta-margem-txt { font-size: 12px; color: #fca5a5; line-height: 1.5; }
-  .alerta-margem-txt b { color: #f87171; }
-
-  /* BLOCO CUSTO */
-  .custo-bloco { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 10px 12px; }
-  .custo-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #21262d; }
-  .custo-row:last-child { border-bottom: none; }
-  .custo-nm { font-size: 11px; color: #8b949e; }
-  .custo-vals { display: flex; gap: 14px; align-items: center; }
-
-  /* AÇÕES */
-  .acoes { padding: 12px 16px; border-top: 1px solid #21262d; display: flex; gap: 8px; background: #0d1117; }
-  .btn-acao { border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: opacity .15s; }
-  .btn-acao:hover { opacity: .85; }
-  .btn-prev { background: #21262d; color: #c9d1d9; flex: 1; }
-  .btn-flag { background: #1a0800; color: #f85149; border: 1px solid #f8514940; padding: 10px 14px; }
-  .btn-confirm { background: #00e5a0; color: #0d1117; flex: 2; }
-
-  /* ESTADO VAZIO / LOADING */
-  .estado-central { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 12px; color: #484f58; font-size: 13px; }
-  .spinner { width: 32px; height: 32px; border: 2px solid #21262d; border-top-color: #00e5a0; border-radius: 50%; animation: spin .8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* BADGE STATUS */
-  .badge { border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 600; }
-  .badge-pend { background: #21262d; color: #8b949e; }
-  .badge-ok { background: #00e5a015; color: #00e5a0; border: 1px solid #00e5a030; }
-  .badge-flag { background: #f8514915; color: #f85149; border: 1px solid #f8514940; }
-
-  /* MODAL ZOOM FOTO */
-  .modal-zoom { position: fixed; inset: 0; background: #000000cc; z-index: 999; display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
-  .modal-zoom.oculto { display: none; }
-  .modal-zoom img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #0d1117; }
-  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
-
-  /* NOMES POSTOS NO DROPDOWN */
-  .dd-search { padding: 8px 10px; border-bottom: 1px solid #21262d; }
-  .dd-search input { width: 100%; background: #21262d; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 12px; padding: 5px 8px; }
-  .dd-search input:focus { outline: none; border-color: #00e5a060; }
+/* TEMA CLARO */
+body.claro{background:#f0f2f5;color:#1a1f2e}
+body.claro .topbar,.claro .card-header,.claro .foto-tabs,.claro .filtros,.claro .preco-table th,.claro .acoes{background:#ffffff;border-color:#dde1e9}
+body.claro .lista-item.ativo{background:#e6f9f2}
+body.claro .lista-item:active{background:#f5f7fa}
+body.claro .li-alvo,.claro .card-title,.claro .fuel-nm,.claro .v-c,.claro .v-m{color:#1a1f2e}
+body.claro .preco-section,.claro .foto-section,.claro .foto-img-area{background:#f5f7fa}
+body.claro .foto-footer{background:#f0f2f5;border-color:#dde1e9}
+body.claro .chip-sm,.claro .mc,.claro .btn-ant,.claro .btn-icon{background:#eaecf0;color:#4a5168;border-color:#cdd1da}
+body.claro .pc-gc{background:#d4f5e2;color:#1a6640}
+body.claro .pc-et{background:#ede8fd;color:#4a2d99}
+body.claro .pc-ga{background:#ddeeff;color:#1a4080}
+body.claro .preco-table td{border-bottom-color:#eaecf0}
+body.claro .tr-ok td{background:#f0faf5}
+body.claro .tr-alert td{background:#fdf5f5}
+body.claro .tr-eq td{background:#fffbf0}
+body.claro .prog{background:#dde1e9}
 </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="tb-brand">⛽ JBRETAS</div>
-  <div class="tb-sub">// Revisor de Coletas</div>
-  <div class="tb-right">
-    <span id="live-badge" class="chip"><span class="live-dot"></span>ao vivo</span>
-    <span class="chip">Data: <b id="data-hoje">—</b></span>
-    <span class="chip"><b id="qtd-total">—</b> coletas</span>
-    <button class="btn-reload" onclick="carregarDados()">↻ Atualizar</button>
-    <button class="btn-reload" onclick="diagnostico()" title="Ver o que o endpoint está retornando">🔍 Diagnóstico</button>
-    <button class="btn-tema" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro/escuro">☀</button>
+  <div class="brand">⛽ Coletas</div>
+  <div class="tright">
+    <span class="ldot"></span>
+    <span class="chip-sm">Data: <b id="data-hoje">—</b></span>
+    <span class="chip-sm"><b id="qtd-total">—</b> coletas</span>
+    <button class="btn-icon" onclick="alternarTema()" id="btn-tema">☀</button>
   </div>
 </div>
-<div class="prog-bar-wrap"><div class="prog-bar-fill" id="prog-fill" style="width:0%"></div></div>
+<div class="prog"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
 
 <!-- FILTROS -->
 <div class="filtros">
-  <label>Data:</label>
-  <input type="date" id="filtro-data" onchange="aplicarFiltros()">
-  <label>Supervisor:</label>
-  <select id="filtro-supervisor" onchange="aplicarFiltros()">
-    <option value="">Todos</option>
+  <select class="filtros-select" id="filtro-supervisor" onchange="aplicarFiltros()">
+    <option value="">Todos supervisores</option>
   </select>
-  <label>Posto:</label>
-  <select id="filtro-posto" onchange="aplicarFiltros()">
-    <option value="">Todos</option>
-  </select>
-  <span class="pill-filter active" id="pill-todos" onclick="setPill('todos')">Todos</span>
-  <span class="pill-filter" id="pill-pend" onclick="setPill('pend')">⏳ Pendentes</span>
-  <span class="pill-filter" id="pill-ok" onclick="setPill('ok')">✓ Confirmados</span>
-  <span class="pill-filter alert-pill" id="pill-flag" onclick="setPill('flag')">⚠ Margem</span>
-  <span class="count"><b id="qtd-filtrados">0</b> registros</span>
+  <span class="pill active" id="pill-todos" onclick="setPill('todos',this)">Todos</span>
+  <span class="pill" id="pill-pend" onclick="setPill('pend',this)">⏳ Pendentes</span>
+  <span class="pill" id="pill-ok" onclick="setPill('ok',this)">✓ Ok</span>
+  <span class="pill danger" id="pill-flag" onclick="setPill('flag',this)">⚠ Margem</span>
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<!-- LISTA -->
+<div class="lista-view ativo" id="lista-view">
+  <div class="estado-central"><div class="spinner"></div>Carregando coletas...</div>
+</div>
 
-  <!-- LISTA -->
-  <div class="lista" id="lista-col">
-    <div class="estado-central"><div class="spinner"></div>Carregando coletas...</div>
+<!-- DETALHE -->
+<div class="detalhe-view" id="detalhe-view">
+
+  <div class="card-header">
+    <div class="card-nav">
+      <button class="btn-voltar" onclick="voltarLista()">← Lista</button>
+      <span style="font-size:11px;color:#8b949e;margin-left:auto" id="nav-counter"></span>
+      <button class="btn-voltar" onclick="navAnterior()">‹ Ant</button>
+      <button class="btn-voltar" onclick="navProximo()">Próx ›</button>
+    </div>
+    <div class="card-title">
+      <span id="d-alvo">—</span>
+      <span class="band-tag" id="d-band">—</span>
+      <span class="badge" id="d-badge">pendente</span>
+    </div>
+    <div class="card-sub">Meu posto: <span id="d-posto">—</span></div>
+    <div class="meta-row">
+      <div class="mc">👤 <b id="d-ger">—</b></div>
+      <div class="mc">🕐 <b id="d-hora">—</b></div>
+      <div class="mc">📋 <b id="d-sup">—</b></div>
+    </div>
   </div>
 
-  <!-- PAINEL -->
-  <div class="painel" id="painel-col">
-    <div class="estado-central">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#484f58" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
-      Selecione uma coleta para revisar
+  <div class="foto-section">
+    <div class="foto-tabs">
+      <div class="foto-tab active" onclick="showFotoTab('conc',this)">📷 Concorrente</div>
+      <div class="foto-tab" onclick="showFotoTab('meu',this)">🏠 Meu posto</div>
     </div>
+    <div class="foto-img-area" id="foto-conc-area">
+      <div class="foto-placeholder" id="foto-conc-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span>Foto não disponível</span>
+      </div>
+      <img class="foto-img" id="foto-conc-img" src="" alt="Foto concorrente" style="display:none"
+           onclick="zoomFoto(this.src)"
+           onerror="this.style.display='none';document.getElementById('foto-conc-err').style.display='flex'">
+      <div class="foto-placeholder" id="foto-conc-err" style="display:none;flex-direction:column;gap:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span style="font-size:11px">Drive bloqueou exibição</span>
+        <a id="link-conc" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
+      </div>
+      <a id="btn-drive-conc" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
+    </div>
+    <div class="foto-img-area" id="foto-meu-area" style="display:none">
+      <div class="foto-placeholder" id="foto-meu-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:32px;height:32px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span style="font-size:11px;color:#00e5a060">Foto do meu posto não disponível</span>
+      </div>
+      <img class="foto-img" id="foto-meu-img" src="" alt="Foto meu posto" style="display:none"
+           onclick="zoomFoto(this.src)"
+           onerror="this.style.display='none';document.getElementById('foto-meu-err').style.display='flex'">
+      <div class="foto-placeholder" id="foto-meu-err" style="display:none;flex-direction:column;gap:8px;background:#0b1810">
+        <span style="font-size:11px;color:#00e5a090">Drive bloqueou exibição</span>
+        <a id="link-meu" href="#" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir no Drive</a>
+      </div>
+      <a id="btn-drive-meu" class="drive-btn" href="#" target="_blank" style="display:none">↗ Drive</a>
+    </div>
+    <div class="foto-footer">
+      <span class="fmeta" id="d-gps">📍 sem GPS</span>
+      <span class="fmeta" id="d-data">📅 —</span>
+    </div>
+  </div>
+
+  <div class="preco-section">
+    <div class="alerta-bar" id="alerta-bar" style="display:none">
+      <span class="alerta-icon">⚠</span>
+      <div class="alerta-txt" id="alerta-txt"></div>
+    </div>
+    <table class="preco-table">
+      <thead>
+        <tr>
+          <th>Combustível</th>
+          <th>Concorrente</th>
+          <th>Meu preço</th>
+          <th>Diferença</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-precos"></tbody>
+    </table>
+  </div>
+
+  <div class="acoes">
+    <button class="btn-ant" onclick="navAnterior()">← Anterior</button>
+    <button class="btn-flag" onclick="sinalizar()" title="Sinalizar margem">⚠</button>
+    <button class="btn-ok" onclick="confirmar()">✓ Confirmar e próximo</button>
   </div>
 
 </div>
 
 <!-- MODAL ZOOM -->
 <div class="modal-zoom oculto" id="modal-zoom" onclick="this.classList.add('oculto')">
-  <img id="modal-img" src="">
+  <img id="modal-img" src="" alt="Foto ampliada">
 </div>
 
 <script>
-// ─── CONFIGURAÇÃO ───────────────────────────────────────────────────────────
 const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwoJ3-g48frwYtMlnpVj5EIYapInPP11OJXrkOPUzCULrbIZWMQW51xFe-Ot4cox00r/exec';
-const PARAM_COLETA = 'tipo=coletaRecentes&dias=1'; // retorna coletas do dia de hoje
-
-// JSONP — contorna CORS quando rodando como arquivo local (file://)
-function fetchJSONP(url) {
-  return new Promise((resolve, reject) => {
-    const cbName = 'jb_cb_' + Date.now();
-    const script = document.createElement('script');
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error('JSONP timeout'));
-    }, 12000);
-    function cleanup() {
-      clearTimeout(timer);
-      delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-    window[cbName] = function(data) { cleanup(); resolve(data); };
-    script.onerror = () => { cleanup(); reject(new Error('JSONP error')); };
-    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
-    document.head.appendChild(script);
-  });
-}
-
-// Preço de custo por combustível por posto — preencher ou buscar do backend
-// Formato: { 'NOME DO POSTO': { GC: 5.42, ET: 3.55, GA: 5.88, S10: 6.10, S500: 5.95 } }
-const CUSTO_POSTOS = {
-  'DEFAULT': { GC: 5.42, ET: 3.55, GA: 5.88, S10: 6.10, S500: 5.95 }
-};
-
-// Margem mínima aceitável por combustível
-const MARGEM_MINIMA = { GC: 0.20, ET: 0.15, GA: 0.20, S10: 0.20, S500: 0.20 };
-
-// Meus preços de venda por posto (será buscado do backend se disponível)
+const PARAM = 'tipo=coletaRecentes&dias=1';
+const MARGEM_MIN = {GC:0.20,ET:0.15,GA:0.20,S10:0.20,S500:0.20};
+const CUSTO = {DEFAULT:{GC:5.42,ET:3.55,GA:5.88,S10:6.10,S500:5.95}};
 const MEU_PRECO = {};
 
-// ─── ESTADO ─────────────────────────────────────────────────────────────────
-let todosRegistros = [];
-let registrosFiltrados = [];
-let estados = {}; // id -> 'pend'|'ok'|'flag'
-let idxAtivo = -1;
-let postoSelecionado = null;
-let listaPosios = [];
-let filtroStatus = 'todos';
-let dropdownAberto = false;
+let todos=[], filtrados=[], estados={}, idxAtivo=-1, filtroStatus='todos';
 
-// ─── LOAD ────────────────────────────────────────────────────────────────────
-async function carregarDados() {
-  document.getElementById('lista-col').innerHTML = '<div class="estado-central"><div class="spinner"></div>Carregando...</div>';
-  document.getElementById('painel-col').innerHTML = '<div class="estado-central"><div class="spinner"></div></div>';
-  try {
-    const url = ENDPOINT + '?' + PARAM_COLETA;
-    // Tenta fetch normal primeiro (quando hospedado em servidor)
-    // Se falhar por CORS (file://), usa JSONP automaticamente
-    let json;
-    try {
-      const resp = await fetch(url);
-      json = await resp.json();
-    } catch(corsErr) {
-      console.info('fetch bloqueado (CORS), tentando JSONP...');
-      json = await fetchJSONP(url);
-    }
-
-    // Suporte a diferentes formatos de retorno
-    let registros = [];
-    if (Array.isArray(json)) registros = json;
-    else if (json.registros && Array.isArray(json.registros)) registros = json.registros; // coletaRecentes
-    else if (json.data && Array.isArray(json.data)) registros = json.data;
-    else if (json.coletas && Array.isArray(json.coletas)) registros = json.coletas;
-
-    todosRegistros = registros.map((r, i) => ({ ...normalizar(r), _id: i }));
-    estados = {};
-    todosRegistros.forEach(r => { estados[r._id] = 'pend'; });
-
-    // Popula filtros
-    const hoje = todosRegistros.length > 0 ? todosRegistros[todosRegistros.length-1].Data : '';
-    document.getElementById('filtro-data').value = converterData(hoje);
-    document.getElementById('data-hoje').textContent = hoje || '—';
-    document.getElementById('qtd-total').textContent = todosRegistros.length;
-
-    const supervisores = [...new Set(todosRegistros.map(r => r.Supervisor).filter(Boolean))].sort();
-    const selSup = document.getElementById('filtro-supervisor');
-    selSup.innerHTML = '<option value="">Todos</option>' + supervisores.map(s => `<option>${s}</option>`).join('');
-
-    listaPosios = [...new Set(todosRegistros.map(r => r.Posto).filter(Boolean))].sort();
-    const selPosto = document.getElementById('filtro-posto');
-    selPosto.innerHTML = '<option value="">Todos</option>' + listaPosios.map(p => `<option>${p}</option>`).join('');
-
+// ─── LOAD ────────────────────────────────────────────────────────
+async function carregar(){
+  try{
+    const resp=await fetch(ENDPOINT+'?'+PARAM);
+    const json=await resp.json();
+    const regs=json.registros||json.data||json||[];
+    todos=regs.map((r,i)=>({...norm(r),_id:i}));
+    estados={};todos.forEach(r=>{estados[r._id]='pend';});
+    poblarFiltros();
     aplicarFiltros();
-  } catch(e) {
-    console.warn('Erro ao buscar dados:', e);
-    document.getElementById('lista-col').innerHTML = `
-      <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
-        <div style="color:#f85149;font-size:12px;font-weight:600">⚠ Não foi possível conectar ao Apps Script</div>
-        <div style="color:#8b949e;font-size:11px">Erro: ${e.message}</div>
-        <div style="color:#8b949e;font-size:11px">Clique em 🔍 Diagnóstico para verificar a conexão</div>
-        <button class="btn-reload" onclick="carregarDemo()" style="margin-top:4px">Carregar dados de demonstração</button>
-      </div>`;
-    document.getElementById('painel-col').innerHTML = '<div class="estado-central">Selecione uma coleta para revisar</div>';
+    document.getElementById('data-hoje').textContent=todos.length>0?todos[todos.length-1].Data:'—';
+    document.getElementById('qtd-total').textContent=todos.length;
+  }catch(e){
+    console.warn(e);
+    document.getElementById('lista-view').innerHTML='<div class="estado-central"><span style="color:#f85149;font-size:12px">⚠ Erro ao carregar</span><span style="color:#8b949e;font-size:11px">'+e.message+'</span><button onclick="carregar()" style="margin-top:8px;background:#21262d;border:none;border-radius:6px;color:#c9d1d9;padding:7px 14px;font-size:12px;cursor:pointer">↻ Tentar novamente</button></div>';
   }
 }
 
-function converterData(d) {
-  if (!d) return '';
-  // tenta formatos dd/mm/yyyy e yyyy-mm-dd
-  if (d.includes('/')) {
-    const [dia, mes, ano] = d.split('/');
-    return `${ano}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`;
-  }
-  return d;
-}
-
-function normalizar(r) {
-  const n = {};
-  for (const k in r) { n[k.trim()] = r[k]; }
-  return {
-    Data:       n.data       || n.Data       || '',
-    Hora:       n.hora       || n.Hora       || '',
-    Posto:      n.posto      || n.Posto      || n['Posto (Gerente)'] || '',
-    Gerente:    n.gerente    || n.Gerente    || '',
-    PostoAlvo:  n.postoAlvo  || n.PostoAlvo  || n['Posto Alvo'] || n['POSTO ALVO'] || n.Alvo || '',
-    Tipo:       n.tipo       || n.Tipo       || '',
-    Bandeira:   n.bandeira   || n.Bandeira   || '',
-    Rede:       n.rede       || n.Rede       || '',
-    Supervisor: n.supervisor || n.Supervisor || '',
-    ET:         parseFuel(n.ET  || n.et),
-    GC:         parseFuel(n.GC  || n.gc),
-    GA:         parseFuel(n.GA  || n.ga),
-    S10:        parseFuel(n.S10 || n.s10),
-    S500:       parseFuel(n.S500|| n.s500),
-    Latitude:   n.lat        || n.Latitude   || n.latitude  || '',
-    Longitude:  n.lng        || n.Longitude  || n.longitude || '',
-    Foto:       n.foto       || n.Foto       || n.foto_url  || n.FotoURL || '',
+function norm(r){
+  const n={};for(const k in r)n[k.trim()]=r[k];
+  return{
+    Data:n.data||n.Data||'',Hora:n.hora||n.Hora||'',
+    Posto:n.posto||n.Posto||n['Posto (Gerente)']||'',
+    Gerente:n.gerente||n.Gerente||'',
+    PostoAlvo:n.postoAlvo||n.PostoAlvo||n['Posto Alvo']||'',
+    Tipo:n.tipo||n.Tipo||'',Bandeira:n.bandeira||n.Bandeira||'',
+    Supervisor:n.supervisor||n.Supervisor||'',
+    ET:pf(n.ET||n.et),GC:pf(n.GC||n.gc),GA:pf(n.GA||n.ga),
+    S10:pf(n.S10||n.s10),S500:pf(n.S500||n.s500),
+    Latitude:n.lat||n.Latitude||'',Longitude:n.lng||n.Longitude||'',
+    Foto:n.foto||n.Foto||'',
   };
 }
+function pf(v){if(v===null||v===undefined||v===''||v==='-')return null;const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;}
 
-function parseFuel(v) {
-  if (v === null || v === undefined || v === '' || v === '-') return null;
-  const n = parseFloat(String(v).replace(',', '.'));
-  return isNaN(n) ? null : n;
+// ─── FILTROS ─────────────────────────────────────────────────────
+function poblarFiltros(){
+  const sups=[...new Set(todos.map(r=>r.Supervisor).filter(Boolean))].sort();
+  const s=document.getElementById('filtro-supervisor');
+  s.innerHTML='<option value="">Todos supervisores</option>'+sups.map(x=>`<option>${x}</option>`).join('');
 }
 
-// ─── DEMO (dados reais da planilha capturados na imagem) ───────────────────
-function carregarDemo() {
-  const demo = [
-    {Data:'24/06/2026',Hora:'07:26',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'POSTO MINEIRO',Tipo:'Concorrente',Bandeira:'ALE',Rede:'Independente',Supervisor:'Fabricio',ET:3.55,GC:5.65,GA:6.05,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:27',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'POSTO ESTAÇÃO',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Fabricio',ET:3.59,GC:5.87,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:28',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'POSTO FLORAMAR',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Fabricio',ET:3.77,GC:5.99,GA:6.29,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:29',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'REDE FENIX SENTIDO BH',Tipo:'Concorrente',Bandeira:'Shell',Rede:'Independente',Supervisor:'Fabricio',ET:3.69,GC:6.29,GA:6.69,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:30',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'REDE FLEX CRISTIANO MAC',Tipo:'Concorrente',Bandeira:'BR/Petrobras',Rede:'Rede Flex',Supervisor:'Fabricio',ET:3.55,GC:5.67,GA:5.97,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:31',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'POSTO MARIO VERNECK',Tipo:'Concorrente',Bandeira:'Ipiranga',Rede:'Independente',Supervisor:'Fabricio',ET:3.55,GC:5.67,GA:6.08,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:31',Posto:'P. SAO BERNARDO',Gerente:'GERENTE LARISSA REIS',PostoAlvo:'P. SAO BERNARDO',Tipo:'Próprio',Bandeira:'Ipiranga',Rede:'Independente',Supervisor:'Fabricio',ET:3.55,GC:5.75,GA:6.05,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:38',Posto:'P. MIRAGEM JBRETAS',Gerente:'GERENTE TIAGO MEN',PostoAlvo:'XAVANTE',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Gledson',ET:3.89,GC:6.09,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:38',Posto:'P. TUNEL',Gerente:'GERENTE MICHEL DAN',PostoAlvo:'PETRO OURO',Tipo:'Concorrente',Bandeira:'BR/Petrobras',Rede:'Independente',Supervisor:'Fabricio',ET:3.99,GC:6.39,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:39',Posto:'P. TUNEL',Gerente:'GERENTE MICHEL DAN',PostoAlvo:'PASSARELA',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Fabricio',ET:3.99,GC:5.97,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:39',Posto:'P. TUNEL',Gerente:'GERENTE MICHEL DAN',PostoAlvo:'REDE ALIANÇA',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Rede Aliança',Supervisor:'Fabricio',ET:3.99,GC:5.97,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:39',Posto:'P. TUNEL',Gerente:'GERENTE MICHEL DAN',PostoAlvo:'SANTANA',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Fabricio',ET:3.65,GC:5.95,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:40',Posto:'P. MIRAGEM JBRETAS',Gerente:'GERENTE TIAGO MEN',PostoAlvo:'P. MIRAGEM',Tipo:'Próprio',Bandeira:'Shell',Rede:'Independente',Supervisor:'Gledson',ET:3.99,GC:5.97,GA:6.27,S10:6.99,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:40',Posto:'P. TUNEL',Gerente:'GERENTE MICHEL DAN',PostoAlvo:'P. TUNEL',Tipo:'Próprio',Bandeira:'BR/Petrobras',Rede:'Independente',Supervisor:'Fabricio',ET:3.99,GC:5.97,GA:null,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:46',Posto:'P. ALEX',Gerente:'GERENTE RAFAEL',PostoAlvo:'P. ALEX',Tipo:'Próprio',Bandeira:'Ipiranga',Rede:'Independente',Supervisor:'Mauricio',ET:3.99,GC:6.29,GA:6.49,S10:6.99,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:58',Posto:'P. LOURA EMPREENDIMEN',Gerente:'GERENTE CLAUDIO',PostoAlvo:'FAISCA',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Paulo',ET:3.59,GC:6.05,GA:6.09,S10:null,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'07:59',Posto:'P. LOURA EMPREENDIMEN',Gerente:'GERENTE CLAUDIO',PostoAlvo:'SÃO GERALDO',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Paulo',ET:3.59,GC:5.97,GA:6.09,S10:6.84,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'08:01',Posto:'P. LOURA EMPREENDIMEN',Gerente:'GERENTE CLAUDIO',PostoAlvo:'MIL',Tipo:'Concorrente',Bandeira:'Bandeira Branca',Rede:'Independente',Supervisor:'Paulo',ET:3.98,GC:5.94,GA:6.14,S10:6.98,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'08:03',Posto:'P. LOURA EMPREENDIMEN',Gerente:'GERENTE CLAUDIO',PostoAlvo:'SHELL SANTO POSTO',Tipo:'Concorrente',Bandeira:'Shell',Rede:'Independente',Supervisor:'Paulo',ET:3.65,GC:5.89,GA:6.79,S10:6.49,S500:null,Foto:''},
-    {Data:'24/06/2026',Hora:'08:06',Posto:'P. SAO LUIZ RL',Gerente:'GERENTE LANCCELOT',PostoAlvo:'P. SAO LUIZ RL',Tipo:'Próprio',Bandeira:'Ipiranga',Rede:'Independente',Supervisor:'Paulo',ET:3.65,GC:6.39,GA:6.75,S10:null,S500:null,Foto:''},
-  ];
-  todosRegistros = demo.map((r,i) => ({...r, _id:i}));
-  estados = {};
-  todosRegistros.forEach(r => { estados[r._id] = 'pend'; });
-
-  const hoje = '24/06/2026';
-  document.getElementById('filtro-data').value = '2026-06-24';
-  document.getElementById('data-hoje').textContent = hoje;
-  document.getElementById('qtd-total').textContent = todosRegistros.length;
-
-  const supervisores = [...new Set(todosRegistros.map(r => r.Supervisor).filter(Boolean))].sort();
-  const selSup = document.getElementById('filtro-supervisor');
-  selSup.innerHTML = '<option value="">Todos</option>' + supervisores.map(s=>`<option>${s}</option>`).join('');
-
-  listaPosios = [...new Set(todosRegistros.map(r => r.Posto).filter(Boolean))].sort();
-  const selPosto = document.getElementById('filtro-posto');
-  selPosto.innerHTML = '<option value="">Todos</option>' + listaPosios.map(p=>`<option>${p}</option>`).join('');
-
-  aplicarFiltros();
-}
-
-// ─── FILTROS ────────────────────────────────────────────────────────────────
-function aplicarFiltros() {
-  const dataVal = document.getElementById('filtro-data').value; // yyyy-mm-dd
-  const supVal  = document.getElementById('filtro-supervisor').value;
-  const postoVal = document.getElementById('filtro-posto').value;
-
-  registrosFiltrados = todosRegistros.filter(r => {
-    if (dataVal) {
-      const dc = converterData(r.Data);
-      if (dc !== dataVal) return false;
-    }
-    if (supVal && r.Supervisor !== supVal) return false;
-    if (postoVal && r.Posto !== postoVal) return false;
-    if (filtroStatus === 'pend' && estados[r._id] !== 'pend') return false;
-    if (filtroStatus === 'ok'   && estados[r._id] !== 'ok')   return false;
-    if (filtroStatus === 'flag' && estados[r._id] !== 'flag') return false;
+function aplicarFiltros(){
+  const sup=document.getElementById('filtro-supervisor').value;
+  filtrados=todos.filter(r=>{
+    if(sup&&r.Supervisor!==sup)return false;
+    if(filtroStatus==='pend'&&estados[r._id]!=='pend')return false;
+    if(filtroStatus==='ok'&&estados[r._id]!=='ok')return false;
+    if(filtroStatus==='flag'&&estados[r._id]!=='flag')return false;
     return true;
   });
-
-  document.getElementById('qtd-filtrados').textContent = registrosFiltrados.length;
   renderLista();
-  if (idxAtivo >= 0) {
-    const ainda = registrosFiltrados.findIndex(r => r._id === (registrosFiltrados[idxAtivo]?._id));
-    if (ainda < 0) limparPainel();
-  }
+  atualizarProg();
 }
 
-function setPill(tipo) {
-  filtroStatus = tipo;
-  ['todos','pend','ok','flag'].forEach(t => {
-    document.getElementById('pill-'+t)?.classList.toggle('active', t===tipo);
-  });
+function setPill(tipo,el){
+  filtroStatus=tipo;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
   aplicarFiltros();
 }
 
-// ─── LISTA ────────────────────────────────────────────────────────────────
-function renderLista() {
-  const el = document.getElementById('lista-col');
-  if (registrosFiltrados.length === 0) {
-    el.innerHTML = '<div class="estado-central">Nenhum registro encontrado</div>';
-    return;
-  }
-  el.innerHTML = registrosFiltrados.map((r, i) => {
-    const est = estados[r._id] || 'pend';
-    const prAtivo = idxAtivo === i ? 'ativo' : '';
-    const prFlag  = est === 'flag' ? 'flagged' : '';
-    const sdCls   = est === 'ok' ? 'sd-ok' : est === 'flag' ? 'sd-flag' : 'sd-pend';
-    const chips = ['GC','ET','GA','S10','S500'].filter(k => r[k] !== null && r[k] !== undefined).map(k =>
-      `<span class="pc pc-${k.toLowerCase()}">${k} ${fmt(r[k])}</span>`
-    ).join('');
-    const bandCor = corBandeira(r.Bandeira);
-    return `<div class="lista-item ${prAtivo} ${prFlag}" onclick="selecionarIdx(${i})">
+// ─── LISTA ───────────────────────────────────────────────────────
+function renderLista(){
+  const el=document.getElementById('lista-view');
+  if(filtrados.length===0){el.innerHTML='<div class="estado-central">Nenhum registro encontrado</div>';return;}
+  el.innerHTML=filtrados.map((r,i)=>{
+    const est=estados[r._id]||'pend';
+    const sc=est==='ok'?'sd-ok':est==='flag'?'sd-flag':'sd-pend';
+    const fl=est==='flag'?'flagged':'';
+    const atv=idxAtivo===i?'ativo':'';
+    const bc=corBanda(r.Bandeira);
+    const chips=['GC','ET','GA','S10','S500'].filter(k=>r[k]!==null&&r[k]!==undefined)
+      .map(k=>`<span class="pc pc-${k.toLowerCase()}">${k} ${fmt(r[k])}</span>`).join('');
+    return`<div class="lista-item ${atv} ${fl}" onclick="abrirDetalhe(${i})">
       <div class="li-top">
-        <span class="li-alvo">${r.PostoAlvo || '—'}</span>
-        <span class="status-dot ${sdCls}"></span>
+        <span class="li-alvo">${r.PostoAlvo||'—'}</span>
+        <span class="sd ${sc}"></span>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span class="li-posto">${r.Posto || ''}</span>
-        <span class="band-pill" style="background:${bandCor.bg};color:${bandCor.txt}">${r.Bandeira||''}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="li-posto">${r.Posto||''}</span>
+        <span class="band-pill" style="background:${bc.bg};color:${bc.txt}">${r.Bandeira||''}</span>
         <span class="li-hora">${r.Hora||''}</span>
       </div>
       <div class="li-prices">${chips}</div>
@@ -554,451 +365,161 @@ function renderLista() {
   }).join('');
 }
 
-// ─── PAINEL ────────────────────────────────────────────────────────────────
-function selecionarIdx(i) {
-  idxAtivo = i;
+// ─── DETALHE ─────────────────────────────────────────────────────
+function abrirDetalhe(i){
+  idxAtivo=i;
+  document.getElementById('lista-view').classList.remove('ativo');
+  document.getElementById('detalhe-view').classList.add('ativo');
+  renderDetalhe();
+}
+
+function voltarLista(){
+  document.getElementById('detalhe-view').classList.remove('ativo');
+  document.getElementById('lista-view').classList.add('ativo');
   renderLista();
-  renderPainel();
-  atualizarProg();
 }
 
-function limparPainel() {
-  idxAtivo = -1;
-  document.getElementById('painel-col').innerHTML = '<div class="estado-central">Selecione uma coleta para revisar</div>';
-}
+function renderDetalhe(){
+  if(idxAtivo<0||idxAtivo>=filtrados.length)return;
+  const r=filtrados[idxAtivo];
+  const custo=CUSTO[r.Posto]||CUSTO['DEFAULT'];
+  const bc=corBanda(r.Bandeira);
+  const est=estados[r._id]||'pend';
 
-function renderPainel() {
-  if (idxAtivo < 0 || idxAtivo >= registrosFiltrados.length) return;
-  const r = registrosFiltrados[idxAtivo];
-  try {
-    _renderPainelInterno(r);
-  } catch(err) {
-    console.error('renderPainel erro:', err);
-    document.getElementById('painel-col').innerHTML = `
-      <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
-        <div style="color:#f85149;font-size:13px;font-weight:600">⚠ Erro ao renderizar painel</div>
-        <div style="color:#8b949e;font-size:11px;font-family:monospace">${err.message}</div>
-        <button class="btn-reload" onclick="renderPainel()">↻ Tentar novamente</button>
-      </div>`;
-  }
-}
+  document.getElementById('nav-counter').textContent=(idxAtivo+1)+'/'+filtrados.length;
+  document.getElementById('d-alvo').textContent=r.PostoAlvo||'—';
+  document.getElementById('d-posto').textContent=r.Posto||'—';
+  document.getElementById('d-ger').textContent=r.Gerente||'—';
+  document.getElementById('d-hora').textContent=r.Hora||'—';
+  document.getElementById('d-sup').textContent=r.Supervisor||'—';
+  document.getElementById('d-data').textContent='📅 '+(r.Data||'—');
+  document.getElementById('d-gps').textContent=r.Latitude&&r.Longitude?'📍 '+r.Latitude+', '+r.Longitude:'📍 sem GPS';
 
-function _renderPainelInterno(r) {
-  const custo = CUSTO_POSTOS[r.Posto] || CUSTO_POSTOS['DEFAULT'];
-  const bc = corBandeira(r.Bandeira);
-  const est = estados[r._id] || 'pend';
+  const bt=document.getElementById('d-band');
+  bt.textContent=r.Bandeira||'';bt.style.background=bc.bg;bt.style.color=bc.txt;
 
-  // ── Buscar registro do próprio posto PRIMEIRO ────────────────────────────
-  // (precisa estar antes da tabela para preencher "Meu Preço")
-  const postoNorm = (s) => (s||'').trim().toUpperCase()
-    .replace(/^P\.\s*/,'').replace(/\s+/g,' ');
+  const badge=document.getElementById('d-badge');
+  badge.textContent=est==='ok'?'✓ confirmado':est==='flag'?'⚠ sinalizado':'pendente';
+  badge.className='badge '+(est==='ok'?'badge-ok':est==='flag'?'badge-flag':'badge-pend');
 
-  const registroProprio = todosRegistros.find(x =>
-    (x.Tipo === 'Próprio' || x.Tipo === 'Proprio') &&
-    x.Data === r.Data &&
-    (postoNorm(x.PostoAlvo) === postoNorm(r.Posto) ||
-     postoNorm(x.Posto)     === postoNorm(r.Posto))
-  );
+  // Proprio posto
+  const pn=s=>(s||'').trim().toUpperCase().replace(/^P\.\s*/,'').replace(/\s+/g,' ');
+  const proprio=todos.find(x=>(x.Tipo==='Próprio'||x.Tipo==='Proprio')&&x.Data===r.Data&&(pn(x.PostoAlvo)===pn(r.Posto)||pn(x.Posto)===pn(r.Posto)));
+  const meu=Object.assign({},MEU_PRECO[r.Posto]||{});
+  if(proprio){['GC','ET','GA','S10','S500'].forEach(k=>{if(proprio[k]!==null&&proprio[k]!==undefined&&!meu[k])meu[k]=proprio[k];});}
 
-  // "Meu Preço": primeiro tenta do objeto MEU_PRECO, depois pega do registro Próprio
-  const meu = Object.assign({}, MEU_PRECO[r.Posto] || {});
-  if (registroProprio) {
-    ['GC','ET','GA','S10','S500'].forEach(k => {
-      if (registroProprio[k] !== null && registroProprio[k] !== undefined && !meu[k]) {
-        meu[k] = registroProprio[k];
-      }
-    });
-  }
-
-  // Detectar alerta de margem
-  let alertaMargem = null;
-  ['GC','ET','GA','S10','S500'].forEach(k => {
-    if (r[k] === null || r[k] === undefined) return;
-    const c = custo[k];
-    const min = MARGEM_MINIMA[k] || 0.20;
-    if (c && r[k] < c + min) {
-      if (!alertaMargem) alertaMargem = [];
-      alertaMargem.push({ k, concorrente: r[k], custo: c, minPossivel: (c + min).toFixed(2).replace('.',',') });
-    }
-  });
-
-  // Tabela de combustíveis
-  const nomes = {GC:'Gasolina C', ET:'Etanol', GA:'Gas. Aditivada', S10:'Diesel S10', S500:'Diesel S500'};
-  const linhasComb = ['GC','ET','GA','S10','S500'].filter(k => r[k] !== null && r[k] !== undefined).map(k => {
-    const c = custo[k];
-    const mp = meu[k] || null;
-    const conc = r[k];
-    let diffHtml = '<span class="diff-eq">—</span>';
-    let trCls = '';
-    if (mp !== null) {
-      const d = mp - conc;
-      if (d > 0.005) {
-        diffHtml = `<span class="diff-dn">▲ R$${fmt(d)}</span><br><span style="font-size:9px;color:#8b949e">eu mais caro</span>`;
-        trCls = 'tr-alert';
-      } else if (d < -0.005) {
-        diffHtml = `<span class="diff-up">▼ R$${fmt(Math.abs(d))}</span><br><span style="font-size:9px;color:#8b949e">eu mais barato</span>`;
-        trCls = 'tr-ok';
-      } else {
-        diffHtml = `<span class="diff-eq">= igual</span>`;
-        trCls = 'tr-eq';
-      }
-    }
-    // Margem inline ao lado do preço
-    const mgInline = c && mp !== null ? (() => {
-      const mg = mp - c;
-      const cls = mg >= (MARGEM_MINIMA[k]||0.20) ? 'mg-ok' : 'mg-warn';
-      return `<span class="${cls}" style="font-size:10px;margin-left:4px">${mg>=0?'+':''}${fmt(mg)}/L</span>`;
-    })() : '';
-    const meuPrecoHtml = mp !== null
-      ? `<div style="display:flex;align-items:baseline;gap:0"><span class="v-meu">R$${fmt(mp)}</span>${mgInline}</div>`
-      : `<span style="color:#484f58">—</span>`;
-    return `<tr class="${trCls}">
-      <td><span class="fuel-nm">${nomes[k]}</span></td>
-      <td><span class="v-conc">R$${fmt(conc)}</span></td>
-      <td>${meuPrecoHtml}</td>
-      <td><span class="custo-txt">${c ? 'R$'+fmt(c) : '—'}</span></td>
-      <td>${diffHtml}</td>
-    </tr>`;
-  }).join('');
-
-  // Bloco custo
-  const linhaCusto = ['GC','ET','GA','S10','S500'].filter(k => custo[k]).map(k => {
-    const mg = r[k] !== null ? (r[k] - custo[k]) : null;
-    const min = MARGEM_MINIMA[k] || 0.20;
-    const mgHtml = mg !== null ? `<span class="${mg>=min?'mg-ok':'mg-warn'}">${mg>=0?'+':''}${fmt(mg)}/L ${mg<min?'⚠':''}</span>` : '';
-    return `<div class="custo-row">
-      <span class="custo-nm">${nomes[k]||k}</span>
-      <div class="custo-vals">
-        <span class="custo-txt">custo R$${fmt(custo[k])}</span>
-        ${mgHtml}
-      </div>
-    </div>`;
-  }).join('');
+  // Fotos
+  setFoto('conc', r.Foto);
+  setFoto('meu', proprio?proprio.Foto:'');
+  showFotoTab('conc', document.querySelector('.foto-tab'));
 
   // Alerta margem
-  const alertaHtml = alertaMargem ? `
-    <div class="alerta-margem">
-      <span class="alerta-margem-icon">⚠</span>
-      <div class="alerta-margem-txt">
-        ${alertaMargem.map(a => `<b>${nomes[a.k]||a.k}:</b> concorrente R$${fmt(a.concorrente)} — abaixo do piso mínimo de R$${a.minPossivel} (custo + margem mín.)`).join('<br>')}
-      </div>
-    </div>` : '';
-
-  const fotoConc = converterUrlDrive(r.Foto);
-  const fotoIdConc = extrairIdDrive(r.Foto);
-  const urlDriveConc = fotoIdConc ? `https://drive.google.com/file/d/${fotoIdConc}/view` : r.Foto;
-
-  const fotoProprio = registroProprio ? converterUrlDrive(registroProprio.Foto) : null;
-  const fotoIdProprio = registroProprio ? extrairIdDrive(registroProprio.Foto) : null;
-  const urlDriveProprio = fotoIdProprio
-    ? `https://drive.google.com/file/d/${fotoIdProprio}/view`
-    : (registroProprio?.Foto || '');
-
-  // ── Foto concorrente ─────────────────────────────────────────────────────
-  const fotoHtmlConc = fotoConc
-    ? `<img class="foto-img" src="${fotoConc}"
-         onclick="zoomFoto('${fotoConc}')"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-         alt="Foto concorrente">
-       <div class="foto-placeholder" style="display:none;flex-direction:column;gap:8px">
-         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-         <span style="font-size:11px">Drive bloqueou a exibição inline</span>
-         <a href="${urlDriveConc}" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir foto no Drive</a>
-       </div>`
-    : `<div class="foto-placeholder">
-         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="width:36px;height:36px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-         <span>Foto não disponível</span>
-       </div>`;
-
-  // ── Foto meu posto ───────────────────────────────────────────────────────
-  const fotoHtmlProprio = fotoProprio
-    ? `<img class="foto-img" src="${fotoProprio}"
-         onclick="zoomFoto('${fotoProprio}')"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-         alt="Foto meu posto">
-       <div class="foto-placeholder" style="display:none;flex-direction:column;gap:8px;background:#0b1810">
-         <span style="font-size:11px;color:#00e5a090">Drive bloqueou exibição inline</span>
-         <a href="${urlDriveProprio}" target="_blank" style="color:#00e5a0;font-size:12px;text-decoration:none">↗ Abrir foto no Drive</a>
-       </div>`
-    : `<div class="foto-placeholder" style="min-height:90px;background:#0b1810">
-         <svg viewBox="0 0 24 24" fill="none" stroke="#00e5a040" stroke-width="1.2" style="width:28px;height:28px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-         <span style="font-size:10px;color:#00e5a060">Foto do meu posto não disponível</span>
-       </div>`;
-
-  const badgeCls = est==='ok'?'badge-ok':est==='flag'?'badge-flag':'badge-pend';
-  const badgeTxt = est==='ok'?'✓ confirmado':est==='flag'?'⚠ margem baixa':'pendente';
-
-  // Seletor de posto clicável
-  const postoHtml = `<div class="posto-selector">
-    <span class="posto-nome-clicavel" onclick="toggleDropdown(event)" id="posto-display">${r.Posto || '—'}</span>
-    <div class="dropdown-lista oculto" id="dd-postos">
-      <div class="dd-search"><input type="text" placeholder="Buscar posto..." oninput="filtrarDropdown(this.value)" id="dd-input"></div>
-      ${listaPosios.map(p => `<div class="dd-item ${p===r.Posto?'selecionado':''}" onclick="selecionarPosto('${p}')">${p}</div>`).join('')}
-    </div>
-  </div>`;
-
-  document.getElementById('painel-col').innerHTML = `
-    <div class="card-header">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div class="card-title">${r.PostoAlvo || '—'}</div>
-          <span class="band-pill" style="background:${bc.bg};color:${bc.txt};font-size:11px;padding:3px 8px">${r.Bandeira||''}</span>
-          <span class="badge ${badgeCls}">${badgeTxt}</span>
-        </div>
-        <div class="card-sub">Meu posto: ${postoHtml}</div>
-      </div>
-      <div class="meta-chips">
-        <div class="meta-chip">👤 <b>${r.Gerente||'—'}</b></div>
-        <div class="meta-chip">🕐 <b>${r.Hora||'—'}</b></div>
-        <div class="meta-chip">📋 <b>${r.Supervisor||'—'}</b></div>
-        <div class="meta-chip">Coleta <b>${idxAtivo+1}/${registrosFiltrados.length}</b></div>
-      </div>
-    </div>
-
-    <div class="card-body">
-      <div class="foto-col">
-        <div class="foto-label">
-          📷 Concorrente — ${r.PostoAlvo || ''}
-          ${fotoConc ? `<a class="btn-drive" href="${r.Foto}" target="_blank">↗ Drive</a>` : ''}
-        </div>
-        <div class="foto-wrap" style="flex:1.4">${fotoHtmlConc}</div>
-
-        <div class="foto-label" style="border-top:1px solid #21262d;color:#00e5a0">
-          🏠 Meu posto — ${r.Posto || ''}
-          ${fotoProprio ? `<a class="btn-drive" href="${registroProprio?.Foto || ''}" target="_blank">↗ Drive</a>` : ''}
-        </div>
-        <div class="foto-wrap" style="flex:1;min-height:80px">${fotoHtmlProprio}</div>
-
-        <div class="foto-footer">
-          <span class="foto-meta">📍 ${r.Latitude && r.Longitude ? r.Latitude+', '+r.Longitude : 'sem GPS'}</span>
-          <span class="foto-meta">📅 ${r.Data||''}</span>
-        </div>
-      </div>
-
-      <div class="precos-col">
-        <div class="precos-label">Comparação de preços</div>
-        <div class="precos-body">
-          ${alertaHtml}
-          <table class="comp-table">
-            <thead>
-              <tr>
-                <th>Combustível</th>
-                <th>Concorrente</th>
-                <th>Meu preço &nbsp;<span style="font-size:9px;color:#484f58;font-weight:400;text-transform:none;letter-spacing:0">(margem)</span></th>
-                <th>Meu custo</th>
-                <th>Diferença</th>
-              </tr>
-            </thead>
-            <tbody>${linhasComb}</tbody>
-          </table>
-          <div>
-            <div style="font-size:10px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:#484f58;margin-bottom:6px">Custo de aquisição hoje</div>
-            <div class="custo-bloco">${linhaCusto}</div>
-          </div>
-        </div>
-        <div class="acoes">
-          <button class="btn-acao btn-prev" onclick="navAnterior()">← Anterior</button>
-          <button class="btn-acao btn-flag" onclick="sinalizarMargem()" title="Sinalizar margem insuficiente">⚠</button>
-          <button class="btn-acao btn-confirm" onclick="confirmar()">✓ Confirmar e próximo</button>
-        </div>
-      </div>
-    </div>`;
-
-  // fecha dropdown ao clicar fora
-  document.addEventListener('click', fecharDropdownFora, {once:false});
-} // fim _renderPainelInterno
-
-function atualizarProg() {
-  const total = registrosFiltrados.length;
-  const confirmados = registrosFiltrados.filter(r => estados[r._id] !== 'pend').length;
-  const pct = total > 0 ? (confirmados/total*100).toFixed(0) : 0;
-  document.getElementById('prog-fill').style.width = pct+'%';
-}
-
-// ─── AÇÕES ────────────────────────────────────────────────────────────────
-function confirmar() {
-  if (idxAtivo < 0) return;
-  estados[registrosFiltrados[idxAtivo]._id] = 'ok';
-  atualizarProg();
-  if (idxAtivo < registrosFiltrados.length - 1) { idxAtivo++; }
-  renderLista();
-  renderPainel();
-}
-
-function navAnterior() {
-  if (idxAtivo > 0) { idxAtivo--; renderLista(); renderPainel(); }
-}
-
-function sinalizarMargem() {
-  if (idxAtivo < 0) return;
-  estados[registrosFiltrados[idxAtivo]._id] = 'flag';
-  atualizarProg();
-  renderLista();
-  renderPainel();
-}
-
-// ─── SELETOR DE POSTO ────────────────────────────────────────────────────
-function toggleDropdown(e) {
-  e.stopPropagation();
-  const dd = document.getElementById('dd-postos');
-  if (!dd) return;
-  dd.classList.toggle('oculto');
-  if (!dd.classList.contains('oculto')) {
-    document.getElementById('dd-input')?.focus();
-  }
-}
-
-function fecharDropdownFora(e) {
-  const dd = document.getElementById('dd-postos');
-  if (dd && !dd.contains(e.target) && e.target.id !== 'posto-display') {
-    dd.classList.add('oculto');
-  }
-}
-
-function filtrarDropdown(q) {
-  const items = document.querySelectorAll('.dd-item');
-  items.forEach(item => {
-    item.style.display = item.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  const alertas=[];
+  const nomes={GC:'Gasolina C',ET:'Etanol',GA:'Gas. Aditivada',S10:'Diesel S10',S500:'Diesel S500'};
+  ['GC','ET','GA','S10','S500'].forEach(k=>{
+    if(r[k]===null||r[k]===undefined)return;
+    const c=custo[k];const min=MARGEM_MIN[k]||0.20;
+    if(c&&r[k]<c+min)alertas.push(`<b>${nomes[k]}:</b> concorrente R$${fmt(r[k])} — abaixo do piso R$${fmt(c+min)}`);
   });
+  const ab=document.getElementById('alerta-bar');
+  document.getElementById('alerta-txt').innerHTML=alertas.join('<br>');
+  ab.style.display=alertas.length?'flex':'none';
+
+  // Tabela
+  const tbody=document.getElementById('tbody-precos');
+  tbody.innerHTML=['GC','ET','GA','S10','S500'].filter(k=>r[k]!==null&&r[k]!==undefined).map(k=>{
+    const c=custo[k];const mp=meu[k]||null;const conc=r[k];
+    let dh='<span class="diff-eq">—</span>';let tc='';
+    if(mp!==null){
+      const d=mp-conc;
+      if(d>0.005){dh=`<span class="diff-dn">▲ R$${fmt(d)}</span><br><span class="diff-sub">eu mais caro</span>`;tc='tr-alert';}
+      else if(d<-0.005){dh=`<span class="diff-up">▼ R$${fmt(Math.abs(d))}</span><br><span class="diff-sub">eu mais barato</span>`;tc='tr-ok';}
+      else{dh=`<span class="diff-eq">= igual</span>`;tc='tr-eq';}
+    }
+    const mgInline=c&&mp!==null?`<span class="${(mp-c)>=(MARGEM_MIN[k]||0.20)?'mg-ok':'mg-warn'}" style="font-size:10px;margin-left:3px">${(mp-c)>=0?'+':''}${fmt(mp-c)}/L</span>`:'';
+    const mpHtml=mp!==null?`<div style="display:flex;align-items:baseline"><span class="v-m">R$${fmt(mp)}</span>${mgInline}</div>`:'<span style="color:#484f58">—</span>';
+    return`<tr class="${tc}"><td><span class="fuel-nm">${nomes[k]}</span></td><td><span class="v-c">R$${fmt(conc)}</span></td><td>${mpHtml}</td><td>${dh}</td></tr>`;
+  }).join('');
 }
 
-function selecionarPosto(nome) {
-  if (idxAtivo < 0) return;
-  // Muda o posto do registro atual para comparar com outro posto
-  registrosFiltrados[idxAtivo].Posto = nome;
-  document.getElementById('dd-postos')?.classList.add('oculto');
-  renderPainel();
-}
-
-// ─── ZOOM FOTO ────────────────────────────────────────────────────────────
-function zoomFoto(src) {
-  // Garante que a URL está no formato de visualização correta
-  document.getElementById('modal-img').src = src;
-  document.getElementById('modal-zoom').classList.remove('oculto');
-}
-
-// ─── HELPERS ─────────────────────────────────────────────────────────────
-function fmt(v) {
-  if (v === null || v === undefined) return '—';
-  return parseFloat(v).toFixed(2).replace('.', ',');
-}
-
-function corBandeira(b) {
-  if (!b) return {bg:'#21262d', txt:'#8b949e'};
-  const bl = b.toLowerCase();
-  if (bl.includes('shell'))    return {bg:'#92600020', txt:'#fcd34d'};
-  if (bl.includes('ipiranga')) return {bg:'#d6400020', txt:'#f87171'};
-  if (bl.includes('br') || bl.includes('petrobras')) return {bg:'#00562020', txt:'#4ade80'};
-  if (bl.includes('ale'))      return {bg:'#1e3a8a20', txt:'#93c5fd'};
-  if (bl.includes('raizen') || bl.includes('raízen')) return {bg:'#92400e20', txt:'#fbbf24'};
-  if (bl.includes('phoenix'))  return {bg:'#4c1d9520', txt:'#c4b5fd'};
-  return {bg:'#30363d', txt:'#c9d1d9'};
-}
-
-// ─── DIAGNÓSTICO ─────────────────────────────────────────────────────────────
-async function diagnostico() {
-  const url = ENDPOINT + '?' + PARAM_COLETA;
-  const painel = document.getElementById('painel-col');
-  painel.innerHTML = `<div class="estado-central"><div class="spinner"></div>Testando conexão com Apps Script...</div>`;
-
-  const resultados = [];
-
-  // Teste 1: fetch direto
-  try {
-    const r = await Promise.race([
-      fetch(url).then(r => r.text()),
-      new Promise((_,rej) => setTimeout(() => rej(new Error('timeout')), 8000))
-    ]);
-    resultados.push({ ok: true, metodo: 'fetch', resp: r.substring(0, 300) });
-  } catch(e) {
-    resultados.push({ ok: false, metodo: 'fetch', erro: e.message });
+function setFoto(tipo,url){
+  const id=extrairId(url);
+  const thumb=id?`https://drive.google.com/thumbnail?id=${id}&sz=w800`:null;
+  const linkUrl=id?`https://drive.google.com/file/d/${id}/view`:(url||'#');
+  const img=document.getElementById(`foto-${tipo}-img`);
+  const ph=document.getElementById(`foto-${tipo}-placeholder`);
+  const err=document.getElementById(`foto-${tipo}-err`);
+  const drv=document.getElementById(`btn-drive-${tipo}`);
+  const lnk=document.getElementById(`link-${tipo}`);
+  img.style.display='none';ph.style.display='none';err.style.display='none';drv.style.display='none';
+  if(thumb){
+    img.src=thumb;img.style.display='block';
+    drv.href=linkUrl;drv.style.display='flex';
+    if(lnk)lnk.href=linkUrl;
+  } else {
+    ph.style.display='flex';
   }
-
-  // Teste 2: JSONP
-  try {
-    const json = await Promise.race([
-      fetchJSONP(url),
-      new Promise((_,rej) => setTimeout(() => rej(new Error('timeout')), 8000))
-    ]);
-    resultados.push({ ok: true, metodo: 'JSONP', resp: JSON.stringify(json).substring(0, 300) });
-  } catch(e) {
-    resultados.push({ ok: false, metodo: 'JSONP', erro: e.message });
-  }
-
-  const html = resultados.map(r => `
-    <div style="background:${r.ok?'#0b1810':'#1a0f0f'};border:1px solid ${r.ok?'#00e5a030':'#f8514940'};border-radius:8px;padding:12px;margin-bottom:8px">
-      <div style="font-weight:600;color:${r.ok?'#00e5a0':'#f85149'};margin-bottom:6px">${r.ok?'✓':'✗'} ${r.metodo}</div>
-      ${r.ok
-        ? `<pre style="font-size:10px;color:#8b949e;white-space:pre-wrap;word-break:break-all">${r.resp}</pre>`
-        : `<div style="font-size:12px;color:#f87171">${r.erro}</div>`}
-    </div>`).join('');
-
-  painel.innerHTML = `
-    <div style="padding:20px;overflow-y:auto;height:100%">
-      <div style="font-size:14px;font-weight:600;color:#e6edf3;margin-bottom:16px">🔍 Diagnóstico de conexão</div>
-      <div style="font-size:11px;color:#8b949e;margin-bottom:12px">URL: <span style="color:#c9d1d9">${url}</span></div>
-      ${html}
-      <div style="background:#161b22;border:1px solid #21262d;border-radius:8px;padding:12px;margin-top:8px">
-        <div style="font-size:12px;font-weight:600;color:#e3b341;margin-bottom:8px">⚡ Se JSONP falhou, adicione isso ao seu doGet no Code.gs:</div>
-        <pre style="font-size:11px;color:#8b949e;background:#0d1117;padding:10px;border-radius:6px;white-space:pre-wrap">function doGet(e) {
-  const callback = e.parameter.callback;
-  // ... seu código atual ...
-  const json = JSON.stringify(resultado);
-  
-  // JSONP — necessário para arquivo local
-  if (callback) {
-    return ContentService
-      .createTextOutput(callback + '(' + json + ')')
-      .setMimeType(ContentService.MimeType.JAVASCRIPT);
-  }
-  return ContentService
-    .createTextOutput(json)
-    .setMimeType(ContentService.MimeType.JSON);
-}</pre>
-      </div>
-      <button class="btn-reload" style="margin-top:12px" onclick="renderLista();limparPainel()">← Voltar</button>
-    </div>`;
-}
-// ─── HELPERS DRIVE ────────────────────────────────────────────────────────
-function converterUrlDrive(url) {
-  if (!url) return null;
-  const m1 = url.match(/\/file\/d\/([^\/\?]+)/);
-  if (m1) return `https://drive.google.com/thumbnail?id=${m1[1]}&sz=w800`;
-  const m2 = url.match(/[?&]id=([^&]+)/);
-  if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=w800`;
-  if (url.includes('thumbnail?id=')) return url;
-  if (url.includes('uc?export=view')) {
-    const m3 = url.match(/id=([^&]+)/);
-    if (m3) return `https://drive.google.com/thumbnail?id=${m3[1]}&sz=w800`;
-  }
-  return url;
 }
 
-function extrairIdDrive(url) {
-  if (!url) return null;
-  const m1 = url.match(/\/file\/d\/([^\/\?]+)/);
-  if (m1) return m1[1];
-  const m2 = url.match(/[?&]id=([^&]+)/);
-  if (m2) return m2[1];
+function extrairId(url){
+  if(!url)return null;
+  const m1=url.match(/\/file\/d\/([^\/\?]+)/);if(m1)return m1[1];
+  const m2=url.match(/[?&]id=([^&]+)/);if(m2)return m2[1];
   return null;
 }
 
-// ─── TEMA CLARO / ESCURO ──────────────────────────────────────────────────
-function alternarTema() {
-  const claro = document.body.classList.toggle('claro');
-  document.getElementById('btn-tema').textContent = claro ? '🌙' : '☀';
-  localStorage.setItem('jb_tema', claro ? 'claro' : 'escuro');
+function showFotoTab(tab,el){
+  document.querySelectorAll('.foto-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else document.querySelector(`.foto-tab:nth-child(${tab==='conc'?1:2})`).classList.add('active');
+  document.getElementById('foto-conc-area').style.display=tab==='conc'?'flex':'none';
+  document.getElementById('foto-meu-area').style.display=tab==='meu'?'flex':'none';
 }
-// Restaura tema salvo
-(function() {
-  if (localStorage.getItem('jb_tema') === 'claro') {
-    document.body.classList.add('claro');
-    const btn = document.getElementById('btn-tema');
-    if (btn) btn.textContent = '🌙';
-  }
-})();
 
-carregarDados();
+// ─── AÇÕES ───────────────────────────────────────────────────────
+function confirmar(){
+  if(idxAtivo<0)return;
+  estados[filtrados[idxAtivo]._id]='ok';
+  atualizarProg();
+  if(idxAtivo<filtrados.length-1){idxAtivo++;renderDetalhe();}
+  else voltarLista();
+}
+function navAnterior(){if(idxAtivo>0){idxAtivo--;renderDetalhe();}}
+function navProximo(){if(idxAtivo<filtrados.length-1){idxAtivo++;renderDetalhe();}}
+function sinalizar(){if(idxAtivo<0)return;estados[filtrados[idxAtivo]._id]='flag';atualizarProg();renderDetalhe();}
+
+function atualizarProg(){
+  const tot=todos.length;
+  const ok=todos.filter(r=>estados[r._id]!=='pend').length;
+  document.getElementById('prog-fill').style.width=tot>0?Math.round(ok/tot*100)+'%':'0%';
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────
+function fmt(v){if(v===null||v===undefined)return'—';return parseFloat(v).toFixed(2).replace('.',',');}
+
+function corBanda(b){
+  if(!b)return{bg:'#21262d',txt:'#8b949e'};const bl=b.toLowerCase();
+  if(bl.includes('shell'))return{bg:'#92600020',txt:'#fcd34d'};
+  if(bl.includes('ipiranga'))return{bg:'#d6400020',txt:'#f87171'};
+  if(bl.includes('br')||bl.includes('petrobras'))return{bg:'#00562020',txt:'#4ade80'};
+  if(bl.includes('ale'))return{bg:'#1e3a8a20',txt:'#93c5fd'};
+  return{bg:'#30363d',txt:'#c9d1d9'};
+}
+
+function zoomFoto(src){document.getElementById('modal-img').src=src;document.getElementById('modal-zoom').classList.remove('oculto');}
+
+function alternarTema(){
+  const c=document.body.classList.toggle('claro');
+  document.getElementById('btn-tema').textContent=c?'🌙':'☀';
+  localStorage.setItem('jb_tema_mobile',c?'claro':'escuro');
+}
+if(localStorage.getItem('jb_tema_mobile')==='claro'){
+  document.body.classList.add('claro');
+  const btn=document.getElementById('btn-tema');
+  if(btn)btn.textContent='🌙';
+}
+
+carregar();
 </script>
 </body>
 </html>
